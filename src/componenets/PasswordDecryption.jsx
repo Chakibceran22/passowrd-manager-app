@@ -1,42 +1,77 @@
 import React, { useState } from 'react';
-import { ShieldIcon, EyeIcon, EyeOffIcon } from './SecurityIcons';
+import { ShieldIcon, EyeIcon, EyeOffIcon, KeyIcon } from './SecurityIcons';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [encryptedPassword, setEncryptedPassword] = useState('');
+  const [decryptionKey, setDecryptionKey] = useState('');
   const [decryptedPassword, setDecryptedPassword] = useState('');
-  const [decryptionType, setDecryptionType] = useState('base64');
+  const [decryptionType, setDecryptionType] = useState('caesarCipher');
   const [showDecrypted, setShowDecrypted] = useState(false);
 
   const decryptionMethods = [
-    { value: 'base64', label: 'Base64 Decoding' },
-    { value: 'rot13', label: 'ROT13 Reverse' },
-    { value: 'simple', label: 'Simple Decode' }
+    { value: 'caesarCipher', label: 'Caesar Cipher (Key-Shift)' },
+    { value: 'xorCipher', label: 'XOR Cipher' },
+    { value: 'base64Key', label: 'Base64 with Key Salt' },
+    { value: 'vigenere', label: 'Vigenère Cipher' }
   ];
 
   const handleDecrypt = () => {
     let result = '';
 
     switch (decryptionType) {
-      case 'base64':
+      case 'caesarCipher':
+        // Caesar Cipher with custom key (shift)
+        const shift = parseInt(decryptionKey) || 3;
+        result = encryptedPassword.split('').map(char => {
+          if (char.match(/[a-z]/i)) {
+            const base = char <= 'Z' ? 65 : 97;
+            return String.fromCharCode((char.charCodeAt(0) - base - shift + 26) % 26 + base);
+          }
+          return char;
+        }).join('');
+        break;
+
+      case 'xorCipher':
+        // XOR Cipher with key
+        if (!decryptionKey) {
+          result = 'Key required for XOR Cipher';
+          break;
+        }
+        result = encryptedPassword.split('').map((char, index) => {
+          const keyChar = decryptionKey[index % decryptionKey.length];
+          return String.fromCharCode(char.charCodeAt(0) ^ keyChar.charCodeAt(0));
+        }).join('');
+        break;
+
+      case 'base64Key':
+        // Base64 with key salt
         try {
-          result = atob(encryptedPassword);
+          const keySalt = decryptionKey ? btoa(decryptionKey).slice(0, 6) : '';
+          result = atob(encryptedPassword + keySalt);
         } catch {
-          result = 'Base64 Decryption failed';
+          result = 'Decryption failed';
         }
         break;
-      case 'rot13':
-        result = encryptedPassword.replace(/[a-zA-Z]/g, char => {
-          const base = char <= 'Z' ? 65 : 97;
-          return String.fromCharCode((char.charCodeAt(0) - base + 13) % 26 + base);
-        });
+
+      case 'vigenere':
+        // Vigenère Cipher
+        if (!decryptionKey) {
+          result = 'Key required for Vigenère Cipher';
+          break;
+        }
+        result = encryptedPassword.split('').map((char, index) => {
+          if (char.match(/[a-z]/i)) {
+            const base = char <= 'Z' ? 65 : 97;
+            const keyChar = decryptionKey[index % decryptionKey.length];
+            const keyBase = keyChar <= 'Z' ? 65 : 97;
+            const keyShift = keyChar.charCodeAt(0) - keyBase;
+            return String.fromCharCode((char.charCodeAt(0) - base - keyShift + 26) % 26 + base);
+          }
+          return char;
+        }).join('');
         break;
-      case 'simple':
-        // Simple XOR decoding (very basic, not secure)
-        result = encryptedPassword.split('').map(char => 
-          String.fromCharCode(char.charCodeAt(0) ^ 0x5A)
-        ).join('');
-        break;
+
       default:
         result = 'Invalid decryption method';
     }
@@ -55,7 +90,7 @@ const PasswordDecryptor = () => {
         : 'bg-white border-gray-200'}`}>
         <div className="flex items-center mb-6">
           <ShieldIcon className={`mr-4 w-12 h-12 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
-          <h1 className="text-3xl font-bold">Secure Decryption Tool</h1>
+          <h1 className="text-3xl font-bold">Advanced Decryption Tool</h1>
         </div>
 
         <div className="space-y-4">
@@ -67,6 +102,23 @@ const PasswordDecryptor = () => {
               value={encryptedPassword}
               onChange={(e) => setEncryptedPassword(e.target.value)}
               placeholder="Enter encrypted text"
+              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+                ? 'bg-gray-700 border-gray-600 text-white' 
+                : 'bg-white border-gray-300 text-black'}`}
+            />
+          </div>
+
+          {/* Decryption Key Input */}
+          <div>
+            <label className="block mb-2 flex items-center">
+              <KeyIcon className="mr-2 w-5 h-5" />
+              Decryption Key
+            </label>
+            <input 
+              type="text"
+              value={decryptionKey}
+              onChange={(e) => setDecryptionKey(e.target.value)}
+              placeholder="Enter decryption key"
               className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
                 ? 'bg-gray-700 border-gray-600 text-white' 
                 : 'bg-white border-gray-300 text-black'}`}
