@@ -36,7 +36,7 @@ const PasswordDecryptor = () => {
           result = 'Key required for XOR Cipher';
           break;
         }
-        result = encryptedPassword.split('').map((char, index) => {
+        result = atob(encryptedPassword).split('').map((char, index) => {
           const keyChar = decryptionKey[index % decryptionKey.length];
           return String.fromCharCode(char.charCodeAt(0) ^ keyChar.charCodeAt(0));
         }).join('');
