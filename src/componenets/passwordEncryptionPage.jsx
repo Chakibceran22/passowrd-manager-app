@@ -69,15 +69,26 @@ const PasswordEncryptor = () => {
           result = 'Key required for Vigenère Cipher';
           break;
         }
-        result = btoa(plainPassword.split('').map((char, index) => {
-          const pNum = char.charCodeAt(0);
-          const kNum = encryptionKey.charCodeAt(index % encryptionKey.length);
-          return String.fromCharCode((pNum + kNum) % 256);
-        }).join(''));
-        const resultdecrcypher1 = atob(result).split('').map((char, index) => {
-            const cNum = char.charCodeAt(0);
+        result = plainPassword.split('').map((char, index) => {
+          if(char.match(/[a-z]/i)) {
+            const base  = char <= 'Z' ? 65 : 97;
+            const pNum = char.charCodeAt(0)
             const kNum = encryptionKey.charCodeAt(index % encryptionKey.length);
-            return String.fromCharCode((cNum - kNum + 256) % 256);
+            return String.fromCharCode(((pNum - base) + (kNum - base)) % 26 + base);
+          }
+        }).join('');
+        const resultdecrcypher1 = result.split('').map((char, index) => {
+            if (char.match(/[a-z]/i)) {
+                const base = char <= 'Z' ? 65 : 97;
+                const cNum = char.charCodeAt(0);
+                const kNum = encryptionKey.charCodeAt(index % encryptionKey.length);
+        
+                // Correct decryption formula
+                const decryptedCharCode = (cNum - kNum + 26) % 26 + base;
+        
+                return String.fromCharCode(decryptedCharCode);
+            }
+            return char;
         }).join('');
         console.log(resultdecrcypher1)
         break;
