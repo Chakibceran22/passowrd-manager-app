@@ -10,7 +10,7 @@ const PasswordEncryptor = () => {
   const [showEncrypted, setShowEncrypted] = useState(false);
 
   const encryptionMethods = [
-    { value: 'ROT13', label: 'Rotate by 13 places', requiresKey: false },
+    { value: 'ROT13', label: 'ROT 13', requiresKey: false },
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },
     { value: 'base64', label: 'Base64', requiresKey: false },
     { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true }
