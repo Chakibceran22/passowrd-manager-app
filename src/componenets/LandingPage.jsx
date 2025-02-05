@@ -90,6 +90,12 @@ const SecurityLandingPage = () => {
             description="Decrypt encrypted text using various key-based methods. Supports multiple encryption techniques."
             route="/decrypt"
           />
+          <FeatureCard 
+            icon={KeyIcon}
+            title="Password Encryptor"
+            description="Encrypt text using various key-based methods. Supports multiple encryption techniques."
+            route="/encrypt"
+          />
         </div>
 
         {/* Security Warning */}
