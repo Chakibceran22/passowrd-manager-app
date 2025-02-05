@@ -57,10 +57,15 @@ const PasswordDecryptor = () => {
           result = 'Key required for Vigenère Cipher';
           break;
         }
-        result = atob(encryptedPassword).split('').map((char, index) => {
-          const cNum = char.charCodeAt(0);
-          const kNum = decryptionKey.charCodeAt(index % decryptionKey.length);
-          return String.fromCharCode((cNum - kNum + 256) % 256);
+        result = encryptedPassword.split('').map((char, index) => {
+          if( char.match(/[a-z]/i) ) {
+            const cNum = char.charCodeAt(0);
+            const kNum = decryptionKey.charCodeAt(index % decryptionKey.length);
+            const base = char <= 'Z' ? 65 : 97;
+            return String.fromCharCode((cNum - kNum + 26) % 26 + base);
+
+          }
+          return char;
         }).join('');
         break;
 
