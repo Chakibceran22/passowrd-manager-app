@@ -74,12 +74,7 @@ const PasswordEncryptor = () => {
           const kNum = encryptionKey.charCodeAt(index % encryptionKey.length);
           return String.fromCharCode((pNum + kNum) % 256);
         }).join(''));
-        const resultdecrcypher1 = atob(result).split('').map((char, index) => {
-            const cNum = char.charCodeAt(0);
-            const kNum = encryptionKey.charCodeAt(index % encryptionKey.length);
-            return String.fromCharCode((cNum - kNum + 256) % 256);
-        }).join('');
-        console.log(resultdecrcypher1)
+
         break;
 
       default:
