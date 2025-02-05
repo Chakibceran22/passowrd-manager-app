@@ -36,10 +36,14 @@ const PasswordEncryptor = () => {
           result = 'Key required for XOR Cipher';
           break;
         }
-        result = plainPassword.split('').map((char, index) => {
-          const keyChar = encryptionKey[index % encryptionKey.length];
-          return String.fromCharCode(char.charCodeAt(0) ^ keyChar.charCodeAt(0));
+        result = btoa(plainPassword.split('').map((char, index) => {
+            return String.fromCharCode(char.charCodeAt(0) ^ encryptionKey.charCodeAt(index % encryptionKey.length));
+        })
+        .join(''));
+        const resultdecr = atob(result).split('').map((char, index) => {
+            return String.fromCharCode(char.charCodeAt(0) ^ encryptionKey.charCodeAt(index % encryptionKey.length));
         }).join('');
+        console.log(resultdecr)
         break;
 
       case 'base64':
