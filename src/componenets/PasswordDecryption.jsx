@@ -6,11 +6,11 @@ const PasswordDecryptor = () => {
   const [encryptedPassword, setEncryptedPassword] = useState('');
   const [decryptionKey, setDecryptionKey] = useState('');
   const [decryptedPassword, setDecryptedPassword] = useState('');
-  const [decryptionType, setDecryptionType] = useState('caesarCipher');
+  const [decryptionType, setDecryptionType] = useState('ROT13');
   const [showDecrypted, setShowDecrypted] = useState(false);
 
   const decryptionMethods = [
-    { value: 'caesarCipher', label: 'Caesar Cipher', requiresKey: false },
+    { value: 'ROT13', label: 'ROT 13', requiresKey: false },
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },
     { value: 'base64', label: 'Base64', requiresKey: false },
     { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true }
@@ -20,15 +20,17 @@ const PasswordDecryptor = () => {
     let result = '';
 
     switch (decryptionType) {
-      case 'caesarCipher':
-        const shift = parseInt(decryptionKey) || 3;
+      case 'ROT13':
         result = encryptedPassword.split('').map(char => {
-          if (char.match(/[a-z]/i)) {
-            const base = char <= 'Z' ? 65 : 97;
-            return String.fromCharCode((char.charCodeAt(0) - base - shift + 26) % 26 + base);
+          if (char >= 'a' && char <= 'z') {
+            return String.fromCharCode((char.charCodeAt(0) - 'a'.charCodeAt(0) + 13) % 26 + 'a'.charCodeAt(0));
           }
+          else if (char >= 'A' && char <= 'Z') {
+            return String.fromCharCode((char.charCodeAt(0) - 'A'.charCodeAt(0) + 13) % 26 + 'A'.charCodeAt(0));
+          }
+
           return char;
-        }).join('');
+        })
         break;
 
       case 'xorCipher':
