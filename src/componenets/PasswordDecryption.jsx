@@ -58,12 +58,12 @@ const PasswordDecryptor = () => {
           break;
         }
         result = encryptedPassword.split('').map((char, index) => {
-          if (char.match(/[a-z]/i)) {
+          if( char.match(/[a-z]/i) ) {
+            const cNum = char.charCodeAt(0);
+            const kNum = decryptionKey.charCodeAt(index % decryptionKey.length);
             const base = char <= 'Z' ? 65 : 97;
-            const keyChar = decryptionKey[index % decryptionKey.length];
-            const keyBase = keyChar <= 'Z' ? 65 : 97;
-            const keyShift = keyChar.charCodeAt(0) - keyBase;
-            return String.fromCharCode((char.charCodeAt(0) - base - keyShift + 26) % 26 + base);
+            return String.fromCharCode((cNum - kNum + 26) % 26 + base);
+
           }
           return char;
         }).join('');
