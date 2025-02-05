@@ -10,7 +10,7 @@ const PasswordEncryptor = () => {
   const [showEncrypted, setShowEncrypted] = useState(false);
 
   const encryptionMethods = [
-    { value: 'caesarCipher', label: 'Caesar Cipher', requiresKey: false },
+    { value: 'ROT13', label: 'Rotate by 13 places', requiresKey: false },
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },
     { value: 'base64', label: 'Base64', requiresKey: false },
     { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true }
@@ -20,15 +20,27 @@ const PasswordEncryptor = () => {
     let result = '';
 
     switch (encryptionType) {
-      case 'caesarCipher':
-        const shift = parseInt(encryptionKey) || 3;
+      case 'ROT13':
         result = plainPassword.split('').map(char => {
-          if (char.match(/[a-z]/i)) {
-            const base = char <= 'Z' ? 65 : 97;
-            return String.fromCharCode((char.charCodeAt(0) - base + shift + 26) % 26 + base);
-          }
-          return char;
+            if( char >= 'a' && char <= 'z' ) {
+                return String.fromCharCode((char.charCodeAt(0) - 'a'.charCodeAt(0) + 13) % 26 + 'a'.charCodeAt(0));
+            }
+            else if (char >= 'A' && char <= 'Z') {
+                return String.fromCharCode((char.charCodeAt(0) - 'A'.charCodeAt(0) + 13) % 26 + 'A'.charCodeAt(0));
+            }
+            return char;
         }).join('');
+        const resultdecrcypher = result.split('').map(char => {
+            if( char >= 'a' && char <= 'z' ) {
+                return String.fromCharCode(( char.charCodeAt(0) - 'a'.charCodeAt(0) + 13) % 26 + 'a'.charCodeAt(0));
+            }
+            else if (char >= 'A' && char <= 'Z') {
+                return String.fromCharCode(( char.charCodeAt(0) - 'A'.charCodeAt(0) + 13) % 26 + 'A'.charCodeAt(0));
+            }
+            
+            return char;
+        }).join('');
+        console.log(resultdecrcypher)
         break;
 
       case 'xorCipher':
@@ -43,7 +55,6 @@ const PasswordEncryptor = () => {
         const resultdecr = atob(result).split('').map((char, index) => {
             return String.fromCharCode(char.charCodeAt(0) ^ encryptionKey.charCodeAt(index % encryptionKey.length));
         }).join('');
-        console.log(resultdecr)
         break;
 
       case 'base64':
