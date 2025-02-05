@@ -13,7 +13,8 @@ const PasswordEncryptor = () => {
     { value: 'ROT13', label: 'ROT 13', requiresKey: false },
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },
     { value: 'base64', label: 'Base64', requiresKey: false },
-    { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true }
+    { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true },
+    { value: 'RSA', label:"RSA" , requiresKey: true}
   ];
 
   const handleEncrypt = () => {
