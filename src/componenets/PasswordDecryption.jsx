@@ -36,7 +36,7 @@ const PasswordDecryptor = () => {
           console.log(parseInt(modulus))
           const tot = atob(encryptedPassword);
           console.log(tot)
-          const decryptedMessage = decryptMessage(JSON.parse(atob(encryptedPassword)), privateKey, n);
+          const decryptedMessage = decryptMessage(JSON.parse(atob(encryptedPassword)), d, parseInt(modulus));
           result = decryptedMessage;          
         break;
         }catch(err){

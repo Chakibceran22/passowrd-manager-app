@@ -34,7 +34,6 @@ const PasswordEncryptor = () => {
         setGeneratedPrivateKey(`(${privateKey}, ${n})`);
         setGeneratedPublicKey(`(${publicKey}, ${n})`);
         result = btoa(JSON.stringify(encryptedMessage));
-        const decryptedMessage1 = decryptMessage(JSON.parse(atob(result)), privateKey, n)
         break;
       case 'ROT13':
         
