@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
+import { calculatePrivateKey,p,q,n,totient } from '../encModules/rsa';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
