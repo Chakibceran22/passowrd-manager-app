@@ -54,18 +54,7 @@ const decryptMessage = (encMessage, privateKey, modulus) => {
         String.fromCharCode(modExp(num, privateKey, modulus))
     ).join("");
 };
-
 const n = calculateModulus(p, q);
 const totient = calculateTotient(p, q);
-const publicKey = calculatePublicKey(totient, n);
-const privateKey = calculatePrivateKey(publicKey, totient);
 
-const message = "chakib";
-const encMessage = encryptMessage(message, publicKey, n);
-const decMessage = decryptMessage(encMessage, privateKey, n);
-console.log("Totient:", totient);
-console.log("Public Key:", publicKey);
-console.log("Private Key:", privateKey);
-console.log("Original Message:", message);
-console.log("Encrypted Message:", encMessage);
-console.log("Decrypted Message:", decMessage);
+export { calculateModulus, calculateTotient, calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n ,totient };
