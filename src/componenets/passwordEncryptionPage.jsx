@@ -25,9 +25,15 @@ const PasswordEncryptor = () => {
 
     switch (encryptionType) {
       case 'RSA':
-
-        setGeneratedPublicKey('Generated public key will appear here');
-        result = 'RSA encrypted text will appear here';
+        const publicKey = calculatePublicKey(totient, n)
+        const privateKey = calculatePrivateKey(publicKey, totient)
+        const encryptedMessage = encryptMessage(plainPassword, publicKey, n)
+        const decryptedMessage = decryptMessage(encryptedMessage, privateKey, n)
+        console.log(publicKey, decryptedMessage)
+        setGeneratedPublicKey(publicKey);
+        result = btoa(JSON.stringify(encryptedMessage));
+        const decryptedMessage1 = decryptMessage(JSON.parse(atob(result)), privateKey, n)
+        console.log(decryptedMessage1)
         break;
       case 'ROT13':
         
@@ -225,7 +231,7 @@ const PasswordEncryptor = () => {
               ? 'bg-gray-700' 
               : 'bg-gray-100'}`}>
               <div className="flex justify-between items-center mb-2">
-                <strong>Encrypted Result:</strong>
+                <strong>Encrypted Result:{encryptionType == 'RSA' && <p>Note: Result in Base64</p>}</strong>
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => copyToClipboard(encryptedPassword)}
