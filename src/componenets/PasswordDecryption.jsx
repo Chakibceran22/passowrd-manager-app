@@ -32,11 +32,8 @@ const PasswordDecryptor = () => {
         // Add RSA decryption logic here using privateKey and modulus
         try{
           const d = parseInt(privateKey);
-          console.log(d)
-          console.log(parseInt(modulus))
-          const tot = atob(encryptedPassword);
-          console.log(tot)
-          const decryptedMessage = decryptMessage(JSON.parse(atob(encryptedPassword)), d, parseInt(modulus));
+          const n = parseInt(modulus);
+          const decryptedMessage = decryptMessage(JSON.parse(atob(encryptedPassword)), d, n);
           result = decryptedMessage;          
         break;
         }catch(err){
