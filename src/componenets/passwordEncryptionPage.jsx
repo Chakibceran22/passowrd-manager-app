@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
-import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n, totient } from '../encModules/rsa';
+import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, n, totient } from '../encModules/rsa';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -34,7 +34,6 @@ const PasswordEncryptor = () => {
         setGeneratedPrivateKey(`(${privateKey}, ${n})`);
         setGeneratedPublicKey(`(${publicKey}, ${n})`);
         result = btoa(JSON.stringify(encryptedMessage));
-        const decryptedMessage1 = decryptMessage(JSON.parse(atob(result)), privateKey, n)
         break;
       case 'ROT13':
         

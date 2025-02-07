@@ -57,4 +57,4 @@ const decryptMessage = (encMessage, privateKey, modulus) => {
 const n = calculateModulus(p, q);
 const totient = calculateTotient(p, q);
 
-export { calculateModulus, calculateTotient, calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n ,totient };
+export { calculateModulus, calculateTotient, calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, n ,totient };
