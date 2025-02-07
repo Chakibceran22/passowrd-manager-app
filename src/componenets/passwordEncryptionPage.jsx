@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
+import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n, totient } from '../encModules/rsa';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -7,6 +8,8 @@ const PasswordEncryptor = () => {
   const [encryptionType, setEncryptionType] = useState('ROT13');
   const [encryptionKey, setEncryptionKey] = useState('');
   const [encryptedPassword, setEncryptedPassword] = useState('');
+  const [generatedPublicKey, setGeneratedPublicKey] = useState(''); // Added missing state
+
   const [showEncrypted, setShowEncrypted] = useState(false);
 
   const encryptionMethods = [
@@ -21,6 +24,11 @@ const PasswordEncryptor = () => {
     let result = '';
 
     switch (encryptionType) {
+      case 'RSA':
+
+        setGeneratedPublicKey('Generated public key will appear here');
+        result = 'RSA encrypted text will appear here';
+        break;
       case 'ROT13':
         
         result = plainPassword.split('').map(char => {
@@ -119,20 +127,6 @@ const PasswordEncryptor = () => {
         </div>
 
         <div className="space-y-4">
-          {/* Plain Password Input */}
-          <div>
-            <label className="block mb-2">Plain Text</label>
-            <input 
-              type="text"
-              value={plainPassword}
-              onChange={(e) => setPlainPassword(e.target.value)}
-              placeholder="Enter text to encrypt"
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
-                ? 'bg-gray-700 border-gray-600 text-white' 
-                : 'bg-white border-gray-300 text-black'}`}
-            />
-          </div>
-
           {/* Encryption Method Selector */}
           <div>
             <label className="block mb-2">Encryption Method</label>
@@ -140,7 +134,8 @@ const PasswordEncryptor = () => {
               value={encryptionType}
               onChange={(e) => {
                 setEncryptionType(e.target.value);
-                setEncryptionKey(''); // Reset key when method changes
+                setEncryptionKey('');
+                setGeneratedPublicKey('');
               }}
               className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
                 ? 'bg-gray-700 border-gray-600 text-white' 
@@ -154,8 +149,22 @@ const PasswordEncryptor = () => {
             </select>
           </div>
 
-          {/* Conditional Key Input */}
-          {encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
+          {/* Plain Text Input */}
+          <div>
+            <label className="block mb-2">Plain Text</label>
+            <input 
+              type="text"
+              value={plainPassword}
+              onChange={(e) => setPlainPassword(e.target.value)}
+              placeholder="Enter text to encrypt"
+              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+                ? 'bg-gray-700 border-gray-600 text-white' 
+                : 'bg-white border-gray-300 text-black'}`}
+            />
+          </div>
+
+          {/* Non-RSA Key Input */}
+          {encryptionType !== 'RSA' && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
             <div>
               <label className="block mb-2 flex items-center">
                 <KeyIcon className="mr-2 w-5 h-5" />
@@ -188,6 +197,28 @@ const PasswordEncryptor = () => {
             Encrypt
           </button>
 
+          {/* RSA Public Key Display */}
+          {encryptionType === 'RSA' && generatedPublicKey && (
+            <div className={`p-4 rounded-lg break-words ${isDarkMode 
+              ? 'bg-gray-700' 
+              : 'bg-gray-100'}`}>
+              <div className="flex justify-between items-center mb-2">
+                <strong>Public Key:</strong>
+                <button 
+                  onClick={() => copyToClipboard(generatedPublicKey)}
+                  className={`px-2 py-1 rounded ${isDarkMode 
+                    ? 'bg-blue-700 hover:bg-blue-600' 
+                    : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                >
+                  Copy
+                </button>
+              </div>
+              <p className="break-all text-sm font-mono">
+                {generatedPublicKey}
+              </p>
+            </div>
+          )}
+
           {/* Encrypted Result */}
           {encryptedPassword && (
             <div className={`p-4 rounded-lg break-words ${isDarkMode 
@@ -197,7 +228,7 @@ const PasswordEncryptor = () => {
                 <strong>Encrypted Result:</strong>
                 <div className="flex space-x-2">
                   <button 
-                    onClick={copyToClipboard}
+                    onClick={() => copyToClipboard(encryptedPassword)}
                     className={`px-2 py-1 rounded ${isDarkMode 
                       ? 'bg-blue-700 hover:bg-blue-600' 
                       : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
