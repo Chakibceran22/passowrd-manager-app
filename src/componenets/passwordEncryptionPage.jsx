@@ -8,7 +8,8 @@ const PasswordEncryptor = () => {
   const [encryptionType, setEncryptionType] = useState('ROT13');
   const [encryptionKey, setEncryptionKey] = useState('');
   const [encryptedPassword, setEncryptedPassword] = useState('');
-  const [generatedPublicKey, setGeneratedPublicKey] = useState(''); // Added missing state
+  const [generatedPublicKey, setGeneratedPublicKey] = useState(''); 
+  const [generatedPrivaetKey, setGeneratedPrivateKey] = useState(''); 
 
   const [showEncrypted, setShowEncrypted] = useState(false);
 
@@ -30,6 +31,7 @@ const PasswordEncryptor = () => {
         const encryptedMessage = encryptMessage(plainPassword, publicKey, n)
         const decryptedMessage = decryptMessage(encryptedMessage, privateKey, n)
         console.log(publicKey, decryptedMessage)
+        setGeneratedPrivateKey(`(${privateKey}, ${n})`);
         setGeneratedPublicKey(`(${publicKey}, ${n})`);
         result = btoa(JSON.stringify(encryptedMessage));
         const decryptedMessage1 = decryptMessage(JSON.parse(atob(result)), privateKey, n)
@@ -191,6 +193,7 @@ const PasswordEncryptor = () => {
 
           {/* RSA Public Key Display */}
           {encryptionType === 'RSA' && generatedPublicKey && (
+            <>
             <div className={`p-4 rounded-lg break-words ${isDarkMode 
               ? 'bg-gray-700' 
               : 'bg-gray-100'}`}>
@@ -209,6 +212,25 @@ const PasswordEncryptor = () => {
                 {generatedPublicKey}
               </p>
             </div>
+            <div className={`p-4 rounded-lg break-words ${isDarkMode 
+              ? 'bg-gray-700' 
+              : 'bg-gray-100'}`}>
+              <div className="flex justify-between items-center mb-2">
+                <strong>Private Key(Keep it a secret):</strong>
+                <button 
+                  onClick={() => copyToClipboard(generatedPrivaetKey)}
+                  className={`px-2 py-1 rounded ${isDarkMode 
+                    ? 'bg-blue-700 hover:bg-blue-600' 
+                    : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                >
+                  Copy
+                </button>
+              </div>
+              <p className="break-all text-sm font-mono">
+                {generatedPrivaetKey}
+              </p>
+            </div>
+            </>
           )}
 
           {/* Encrypted Result */}
