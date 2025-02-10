@@ -8,6 +8,7 @@ import RsaPublicKeyDisplay from './RsaPublicKeyDisplay';
 import DarkModeToggle from './ToggleButton';
 import KeyInput from './KeyInput';
 import BackButton from './BackButton';
+import PasswordInput from './PasswordInput';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -17,6 +18,7 @@ const PasswordEncryptor = () => {
   const [encryptedPassword, setEncryptedPassword] = useState('');
   const [generatedPublicKey, setGeneratedPublicKey] = useState(''); 
   const [generatedPrivaetKey, setGeneratedPrivateKey] = useState(''); 
+  const [showPassword, setShowPassword] = useState(false);
 
   const [showEncrypted, setShowEncrypted] = useState(false);
 
@@ -132,8 +134,7 @@ const PasswordEncryptor = () => {
         <div className="space-y-4">
           {/* Encryption Method Selector */}
           <SelectionDropDown encryptionType={encryptionType} encryptionMethods={encryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setEncryptionKey} setEncryptionType={setEncryptionType} setGeneratedPublicKey={setGeneratedPublicKey} notice={"Encryption Method"}/>
-          <Input placeholder={"Plain Password"} password={plainPassword} setPassword={setPlainPassword} isDarkMode={isDarkMode}></Input>
-
+          <PasswordInput isDarkMode={isDarkMode} setPassword={setPlainPassword} password={plainPassword} showPassword={showPassword} setShowPassword={setShowPassword}/>
           {/* Non-RSA Key Input */}
           {encryptionType !== 'RSA' && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
             <KeyInput isDarkMode={isDarkMode} setKey={setEncryptionKey} Key={encryptionKey} notice={"Encryption Key"} />

@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon, LockIcon, EyeIcon, EyeOffIcon } from './SecurityIcons';
-
+import DarkModeToggle from './ToggleButton';
+import Button from './Button';
+import SaltInput from './SaltInput';
+import PasswordInput from './PasswordInput';
+import BackButton from './BackButton';
 const PasswordHasher = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [password, setPassword] = useState('');
@@ -53,53 +57,15 @@ const PasswordHasher = () => {
         <div className="flex items-center mb-6">
           <ShieldIcon className={`mr-4 w-12 h-12 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
           <h1 className="text-3xl font-bold">Secure Hash Generator</h1>
+          <BackButton isDarkMode={isDarkMode} />
         </div>
 
         <div className="space-y-4">
           {/* Password Input */}
-          <div className="relative">
-            <label className="block mb-2 flex items-center">
-              <KeyIcon className="mr-2 w-5 h-5" />
-              Password
-            </label>
-            <div className="relative">
-              <input 
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password to hash"
-                className={`w-full p-3 rounded-lg border-2 pr-10 ${isDarkMode 
-                  ? 'bg-gray-700 border-gray-600 text-white' 
-                  : 'bg-white border-gray-300 text-black'}`}
-              />
-              <button 
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
-              >
-                {showPassword ? 
-                  <EyeOffIcon className="w-6 h-6 text-gray-500" /> : 
-                  <EyeIcon className="w-6 h-6 text-gray-500" />
-                }
-              </button>
-            </div>
-          </div>
+          <PasswordInput showPassword={showPassword} isDarkMode={isDarkMode} password={password} setPassword={setPassword} setShowPassword={setShowPassword} />
 
           {/* Salt Input */}
-          <div>
-            <label className="block mb-2 flex items-center">
-              <LockIcon className="mr-2 w-5 h-5" />
-              Salt (Optional)
-            </label>
-            <input 
-              type="text"
-              value={salt}
-              onChange={(e) => setSalt(e.target.value)}
-              placeholder="Add extra security with a salt"
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
-                ? 'bg-gray-700 border-gray-600 text-white' 
-                : 'bg-white border-gray-300 text-black'}`}
-            />
-          </div>
+          <SaltInput salt={salt} setSalt={setSalt} isDarkMode={isDarkMode} />
 
           {/* Hash Method Selector */}
           <div>
@@ -120,19 +86,7 @@ const PasswordHasher = () => {
           </div>
 
           {/* Hash Button */}
-          <button 
-            onClick={handleHash}
-            disabled={!password}
-            className={`w-full p-3 rounded-lg transition duration-300 ${
-              password 
-                ? (isDarkMode 
-                  ? 'bg-green-700 hover:bg-green-600 text-white' 
-                  : 'bg-green-500 hover:bg-green-600 text-white')
-                : 'bg-gray-400 cursor-not-allowed'
-            }`}
-          >
-            Generate Hash
-          </button>
+          <Button handleEvent={handleHash} word="Hash" isDarkMode={isDarkMode} password={password} />
 
           {/* Hashed Result */}
           {hashedPassword && (
@@ -156,16 +110,7 @@ const PasswordHasher = () => {
         </div>
 
         {/* Mode Toggle */}
-        <div className="mt-4 flex justify-end">
-          <button 
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-2 rounded flex items-center ${isDarkMode 
-              ? 'bg-gray-700 hover:bg-gray-600 text-white' 
-              : 'bg-gray-200 hover:bg-gray-300 text-black'}`}
-          >
-            {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-        </div>
+        <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       </div>
     </div>
   );
