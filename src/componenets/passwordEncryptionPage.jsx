@@ -6,7 +6,7 @@ import Input from './Input';
 import SelectionDropDown from './SelectionDropDown';
 import RsaPublicKeyDisplay from './RsaPublicKeyDisplay';
 import DarkModeToggle from './ToggleButton';
-
+import KeyInput from './KeyInput';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -135,21 +135,7 @@ const PasswordEncryptor = () => {
 
           {/* Non-RSA Key Input */}
           {encryptionType !== 'RSA' && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
-            <div>
-              <label className="block mb-2 flex items-center">
-                <KeyIcon className="mr-2 w-5 h-5" />
-                Encryption Key
-              </label>
-              <input 
-                type="text"
-                value={encryptionKey}
-                onChange={(e) => setEncryptionKey(e.target.value)}
-                placeholder="Enter encryption key"
-                className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
-                  ? 'bg-gray-700 border-gray-600 text-white' 
-                  : 'bg-white border-gray-300 text-black'}`}
-              />
-            </div>
+            <KeyInput isDarkMode={isDarkMode} setKey={setEncryptionKey} Key={encryptionKey} notice={"Encryption Key"} />
           )}
 
           <Button handleEvent={handleEncrypt} password={plainPassword} word={"Encrypt"} isDarkMode={isDarkMode}></Button>
