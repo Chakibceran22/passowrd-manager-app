@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
 import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n, totient } from '../encModules/rsa';
 import Button from './Button';
+import Input from './Input';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -144,20 +145,9 @@ const PasswordEncryptor = () => {
               ))}
             </select>
           </div>
+          <Input placeholder={"Plain Password"} password={plainPassword} setPassword={setPlainPassword} isDarkMode={isDarkMode}></Input>
 
-          {/* Plain Text Input */}
-          <div>
-            <label className="block mb-2">Plain Text</label>
-            <input 
-              type="text"
-              value={plainPassword}
-              onChange={(e) => setPlainPassword(e.target.value)}
-              placeholder="Enter text to encrypt"
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
-                ? 'bg-gray-700 border-gray-600 text-white' 
-                : 'bg-white border-gray-300 text-black'}`}
-            />
-          </div>
+          
 
           {/* Non-RSA Key Input */}
           {encryptionType !== 'RSA' && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (

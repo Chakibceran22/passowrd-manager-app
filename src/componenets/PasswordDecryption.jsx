@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
 import { calculatePrivateKey,p,q,n,totient } from '../encModules/rsa';
 import Button from './Button';
+import Input from './Input';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -93,19 +94,7 @@ const PasswordDecryptor = () => {
         </div>
 
         <div className="space-y-4">
-          {/* Encrypted Input */}
-          <div>
-            <label className="block mb-2">Encrypted Text</label>
-            <input 
-              type="text"
-              value={encryptedPassword}
-              onChange={(e) => setEncryptedPassword(e.target.value)}
-              placeholder="Enter encrypted text"
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
-                ? 'bg-gray-700 border-gray-600 text-white' 
-                : 'bg-white border-gray-300 text-black'}`}
-            />
-          </div>
+          <Input placeholder={"Encrypted Text"} password={encryptedPassword} setPassword={setEncryptedPassword} isDarkMode={isDarkMode}></Input>
 
           {/* Decryption Method Selector */}
           <div>
