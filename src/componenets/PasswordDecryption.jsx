@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
 import { calculatePrivateKey,p,q,n,totient } from '../encModules/rsa';
+import Button from './Button';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -146,20 +147,8 @@ const PasswordDecryptor = () => {
             </div>
           )}
 
-          {/* Decrypt Button */}
-          <button 
-            onClick={handleDecrypt}
-            disabled={!encryptedPassword}
-            className={`w-full p-3 rounded-lg transition duration-300 ${
-              encryptedPassword 
-                ? (isDarkMode 
-                  ? 'bg-purple-700 hover:bg-purple-600 text-white' 
-                  : 'bg-purple-500 hover:bg-purple-600 text-white')
-                : 'bg-gray-400 cursor-not-allowed'
-            }`}
-          >
-            Decrypt
-          </button>
+          <Button handleEvent={handleDecrypt} password={encryptedPassword} word={"Decrypt"} isDarkMode={isDarkMode}></Button>
+          
 
           {/* Decrypted Result */}
           {decryptedPassword && (
