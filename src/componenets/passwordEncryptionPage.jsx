@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
-import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, n, totient } from '../encModules/rsa';
+import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n, totient } from '../encModules/rsa';
+import Button from './Button';
+
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -18,7 +20,8 @@ const PasswordEncryptor = () => {
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },
     { value: 'base64', label: 'Base64', requiresKey: false },
     { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true },
-    { value: 'RSA', label:"RSA" , requiresKey: true}
+    { value: 'RSA', label:"RSA" , requiresKey: true},
+    { value: "Affine" , label: "Affine Cipher", requiresKey: true},
   ];
 
   const handleEncrypt = () => {
@@ -175,20 +178,7 @@ const PasswordEncryptor = () => {
             </div>
           )}
 
-          {/* Encrypt Button */}
-          <button 
-            onClick={handleEncrypt}
-            disabled={!plainPassword}
-            className={`w-full p-3 rounded-lg transition duration-300 ${
-              plainPassword 
-                ? (isDarkMode 
-                  ? 'bg-purple-700 hover:bg-purple-600 text-white' 
-                  : 'bg-purple-500 hover:bg-purple-600 text-white')
-                : 'bg-gray-400 cursor-not-allowed'
-            }`}
-          >
-            Encrypt
-          </button>
+          <Button handleEvent={handleEncrypt} password={plainPassword} word={"Encrypt"} isDarkMode={isDarkMode}></Button>
 
           {/* RSA Public Key Display */}
           {encryptionType === 'RSA' && generatedPublicKey && (
