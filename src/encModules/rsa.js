@@ -1,7 +1,7 @@
 import { gcd } from "mathjs";
 
-const p = 29;
-const q = 19;
+const p = 31;
+const q = 37;
 
 const calculateModulus = (p, q) => p * q;
 const calculateTotient = (p, q) => (p - 1) * (q - 1);
@@ -57,4 +57,4 @@ const decryptMessage = (encMessage, privateKey, modulus) => {
 const n = calculateModulus(p, q);
 const totient = calculateTotient(p, q);
 
-export { calculateModulus, calculateTotient, calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n ,totient };
+export { calculateModulus, calculateTotient, calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, n ,totient };

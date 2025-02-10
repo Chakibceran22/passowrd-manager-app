@@ -3,6 +3,7 @@ import { ShieldIcon, KeyIcon } from './SecurityIcons';
 import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n, totient } from '../encModules/rsa';
 import Button from './Button';
 
+
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [plainPassword, setPlainPassword] = useState('');
@@ -36,7 +37,6 @@ const PasswordEncryptor = () => {
         setGeneratedPrivateKey(`(${privateKey}, ${n})`);
         setGeneratedPublicKey(`(${publicKey}, ${n})`);
         result = btoa(JSON.stringify(encryptedMessage));
-        const decryptedMessage1 = decryptMessage(JSON.parse(atob(result)), privateKey, n)
         break;
       case 'ROT13':
         
