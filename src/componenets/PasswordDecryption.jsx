@@ -4,10 +4,13 @@ import { calculatePrivateKey,p,q,n,totient } from '../encModules/rsa';
 import Button from './Button';
 import Input from './Input';
 
+
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [encryptedPassword, setEncryptedPassword] = useState('');
   const [decryptionKey, setDecryptionKey] = useState('');
+  const [privateKey, setPrivateKey] = useState('');
+  const [modulus, setModulus] = useState('');
   const [decryptedPassword, setDecryptedPassword] = useState('');
   const [decryptionType, setDecryptionType] = useState('ROT13');
   const [showDecrypted, setShowDecrypted] = useState(false);
@@ -16,13 +19,32 @@ const PasswordDecryptor = () => {
     { value: 'ROT13', label: 'ROT 13', requiresKey: false },
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },
     { value: 'base64', label: 'Base64', requiresKey: false },
-    { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true }
+    { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true },
+    { value: 'rsa', label: 'RSA', requiresKey: true }
   ];
 
   const handleDecrypt = () => {
     let result = '';
 
     switch (decryptionType) {
+      case 'rsa':
+        if (!privateKey || !modulus) {
+          result = 'Both private key and modulus are required for RSA';
+          break;
+        }
+        // Add RSA decryption logic here using privateKey and modulus
+        try{
+          const d = parseInt(privateKey);
+          const n = parseInt(modulus);
+          const decryptedMessage = decryptMessage(JSON.parse(atob(encryptedPassword)), d, n);
+          result = decryptedMessage;          
+        break;
+        }catch(err){
+          result = 'RSA decryption failed';
+          console.log(err)
+          break;
+        }
+
       case 'ROT13':
         result = encryptedPassword.split('').map(char => {
           if (char >= 'a' && char <= 'z') {
@@ -31,9 +53,8 @@ const PasswordDecryptor = () => {
           else if (char >= 'A' && char <= 'Z') {
             return String.fromCharCode((char.charCodeAt(0) - 'A'.charCodeAt(0) + 13) % 26 + 'A'.charCodeAt(0));
           }
-
           return char;
-        })
+        }).join('');
         break;
 
       case 'xorCipher':
@@ -66,7 +87,6 @@ const PasswordDecryptor = () => {
             const kNum = decryptionKey.charCodeAt(index % decryptionKey.length);
             const base = char <= 'Z' ? 65 : 97;
             return String.fromCharCode((cNum - kNum + 26) % 26 + base);
-
           }
           return char;
         }).join('');
@@ -103,7 +123,9 @@ const PasswordDecryptor = () => {
               value={decryptionType}
               onChange={(e) => {
                 setDecryptionType(e.target.value);
-                setDecryptionKey(''); // Reset key when method changes
+                setDecryptionKey('');
+                setPrivateKey('');
+                setModulus('');
               }}
               className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
                 ? 'bg-gray-700 border-gray-600 text-white' 
@@ -117,8 +139,44 @@ const PasswordDecryptor = () => {
             </select>
           </div>
 
-          {/* Conditional Key Input */}
-          {decryptionMethods.find(m => m.value === decryptionType)?.requiresKey && (
+          {/* RSA-specific inputs */}
+          {decryptionType === 'rsa' && (
+            <div className="space-y-4">
+              <div>
+                <label className="block mb-2 flex items-center">
+                  <KeyIcon className="mr-2 w-5 h-5" />
+                  Private Key (d)
+                </label>
+                <input 
+                  type="number"
+                  value={privateKey}
+                  onChange={(e) => setPrivateKey(e.target.value)}
+                  placeholder="Enter private key"
+                  className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white' 
+                    : 'bg-white border-gray-300 text-black'}`}
+                />
+              </div>
+              <div>
+                <label className="block mb-2 flex items-center">
+                  <KeyIcon className="mr-2 w-5 h-5" />
+                  Modulus (n)
+                </label>
+                <input 
+                  type="number"
+                  value={modulus}
+                  onChange={(e) => setModulus(e.target.value)}
+                  placeholder="Enter modulus"
+                  className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+                    ? 'bg-gray-700 border-gray-600 text-white' 
+                    : 'bg-white border-gray-300 text-black'}`}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Conditional Key Input for other methods */}
+          {decryptionType !== 'rsa' && decryptionMethods.find(m => m.value === decryptionType)?.requiresKey && (
             <div>
               <label className="block mb-2 flex items-center">
                 <KeyIcon className="mr-2 w-5 h-5" />

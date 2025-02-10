@@ -4,6 +4,7 @@ import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage,
 import Button from './Button';
 import Input from './Input';
 
+
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [plainPassword, setPlainPassword] = useState('');
@@ -37,7 +38,6 @@ const PasswordEncryptor = () => {
         setGeneratedPrivateKey(`(${privateKey}, ${n})`);
         setGeneratedPublicKey(`(${publicKey}, ${n})`);
         result = btoa(JSON.stringify(encryptedMessage));
-        const decryptedMessage1 = decryptMessage(JSON.parse(atob(result)), privateKey, n)
         break;
       case 'ROT13':
         
