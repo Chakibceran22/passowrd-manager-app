@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
-import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, p, q, n, totient } from '../encModules/rsa';
+import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage,  n, totient } from '../encModules/rsa';
 import Button from './Button';
 import Input from './Input';
+import SelectionDropDown from './SelectionDropDown';
 
 
 const PasswordEncryptor = () => {
@@ -125,26 +126,7 @@ const PasswordEncryptor = () => {
 
         <div className="space-y-4">
           {/* Encryption Method Selector */}
-          <div>
-            <label className="block mb-2">Encryption Method</label>
-            <select 
-              value={encryptionType}
-              onChange={(e) => {
-                setEncryptionType(e.target.value);
-                setEncryptionKey('');
-                setGeneratedPublicKey('');
-              }}
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
-                ? 'bg-gray-700 border-gray-600 text-white' 
-                : 'bg-white border-gray-300 text-black'}`}
-            >
-              {encryptionMethods.map(method => (
-                <option key={method.value} value={method.value}>
-                  {method.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <SelectionDropDown encryptionType={encryptionType} encryptionMethods={encryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setEncryptionKey} setEncryptionType={setEncryptionType} setGeneratedPublicKey={setGeneratedPublicKey}/>
           <Input placeholder={"Plain Password"} password={plainPassword} setPassword={setPlainPassword} isDarkMode={isDarkMode}></Input>
 
           

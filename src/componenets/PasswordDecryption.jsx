@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldIcon, KeyIcon } from './SecurityIcons';
-import { calculatePrivateKey,p,q,n,totient } from '../encModules/rsa';
+import { decryptMessage } from '../encModules/rsa';
 import Button from './Button';
 import Input from './Input';
 
