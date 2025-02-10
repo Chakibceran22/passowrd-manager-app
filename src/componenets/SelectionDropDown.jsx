@@ -1,7 +1,7 @@
-const SelectionDropDown = ({ encryptionType, encryptionMethods, isDarkMode, setEncryptionKey, setEncryptionType, setGeneratedPublicKey}) => {
+const SelectionDropDown = ({ encryptionType, encryptionMethods, isDarkMode, setEncryptionKey, setEncryptionType, setGeneratedPublicKey, notice}) => {
     return (
         <div>
-            <label className="block mb-2">Encryption Method</label>
+            <label className="block mb-2">{notice}</label>
             <select
                 value={encryptionType}
                 onChange={(e) => {

@@ -17,7 +17,7 @@ const SecurityLandingPage = () => {
         : 'bg-gray-100 text-black'
       }`}>
       {/* Header */}
-      <Header isDarkMode={isDarkMode} setIsDarkMode={isDarkMode}></Header>
+      <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}></Header>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">

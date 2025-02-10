@@ -4,6 +4,8 @@ import {calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage,
 import Button from './Button';
 import Input from './Input';
 import SelectionDropDown from './SelectionDropDown';
+import RsaPublicKeyDisplay from './RsaPublicKeyDisplay';
+import DarkModeToggle from './ToggleButton';
 
 
 const PasswordEncryptor = () => {
@@ -126,7 +128,7 @@ const PasswordEncryptor = () => {
 
         <div className="space-y-4">
           {/* Encryption Method Selector */}
-          <SelectionDropDown encryptionType={encryptionType} encryptionMethods={encryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setEncryptionKey} setEncryptionType={setEncryptionType} setGeneratedPublicKey={setGeneratedPublicKey}/>
+          <SelectionDropDown encryptionType={encryptionType} encryptionMethods={encryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setEncryptionKey} setEncryptionType={setEncryptionType} setGeneratedPublicKey={setGeneratedPublicKey} notice={"Encryption Method"}/>
           <Input placeholder={"Plain Password"} password={plainPassword} setPassword={setPlainPassword} isDarkMode={isDarkMode}></Input>
 
           
@@ -154,44 +156,7 @@ const PasswordEncryptor = () => {
 
           {/* RSA Public Key Display */}
           {encryptionType === 'RSA' && generatedPublicKey && (
-            <>
-            <div className={`p-4 rounded-lg break-words ${isDarkMode 
-              ? 'bg-gray-700' 
-              : 'bg-gray-100'}`}>
-              <div className="flex justify-between items-center mb-2">
-                <strong>Public Key:</strong>
-                <button 
-                  onClick={() => copyToClipboard(generatedPublicKey)}
-                  className={`px-2 py-1 rounded ${isDarkMode 
-                    ? 'bg-blue-700 hover:bg-blue-600' 
-                    : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
-                >
-                  Copy
-                </button>
-              </div>
-              <p className="break-all text-sm font-mono">
-                {generatedPublicKey}
-              </p>
-            </div>
-            <div className={`p-4 rounded-lg break-words ${isDarkMode 
-              ? 'bg-gray-700' 
-              : 'bg-gray-100'}`}>
-              <div className="flex justify-between items-center mb-2">
-                <strong>Private Key(Keep it a secret):</strong>
-                <button 
-                  onClick={() => copyToClipboard(generatedPrivaetKey)}
-                  className={`px-2 py-1 rounded ${isDarkMode 
-                    ? 'bg-blue-700 hover:bg-blue-600' 
-                    : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
-                >
-                  Copy
-                </button>
-              </div>
-              <p className="break-all text-sm font-mono">
-                {generatedPrivaetKey}
-              </p>
-            </div>
-            </>
+            <RsaPublicKeyDisplay isDarkMode={isDarkMode} copyToClipboard={copyToClipboard} generatedPublicKey={generatedPublicKey} generatedPrivaetKey={generatedPrivaetKey} />
           )}
 
           {/* Encrypted Result */}
@@ -228,16 +193,7 @@ const PasswordEncryptor = () => {
         </div>
 
         {/* Mode Toggle */}
-        <div className="mt-4 flex justify-end">
-          <button 
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-2 rounded flex items-center ${isDarkMode 
-              ? 'bg-gray-700 hover:bg-gray-600 text-white' 
-              : 'bg-gray-200 hover:bg-gray-300 text-black'}`}
-          >
-            {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-        </div>
+        <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}></DarkModeToggle>
       </div>
     </div>
   );

@@ -3,6 +3,8 @@ import { ShieldIcon, KeyIcon } from './SecurityIcons';
 import { decryptMessage } from '../encModules/rsa';
 import Button from './Button';
 import Input from './Input';
+import SelectionDropDown from './SelectionDropDown';
+import DarkModeToggle from './ToggleButton';
 
 
 const PasswordDecryptor = () => {
@@ -116,28 +118,8 @@ const PasswordDecryptor = () => {
         <div className="space-y-4">
           <Input placeholder={"Encrypted Text"} password={encryptedPassword} setPassword={setEncryptedPassword} isDarkMode={isDarkMode}></Input>
 
-          {/* Decryption Method Selector */}
-          <div>
-            <label className="block mb-2">Decryption Method</label>
-            <select 
-              value={decryptionType}
-              onChange={(e) => {
-                setDecryptionType(e.target.value);
-                setDecryptionKey('');
-                setPrivateKey('');
-                setModulus('');
-              }}
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
-                ? 'bg-gray-700 border-gray-600 text-white' 
-                : 'bg-white border-gray-300 text-black'}`}
-            >
-              {decryptionMethods.map(method => (
-                <option key={method.value} value={method.value}>
-                  {method.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <SelectionDropDown encryptionType={decryptionType} encryptionMethods={decryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setDecryptionKey} setEncryptionType={setDecryptionType} setGeneratedPublicKey={setPrivateKey} notice={"Deryption Method"}/>
+
 
           {/* RSA-specific inputs */}
           {decryptionType === 'rsa' && (
@@ -231,16 +213,7 @@ const PasswordDecryptor = () => {
         </div>
 
         {/* Mode Toggle */}
-        <div className="mt-4 flex justify-end">
-          <button 
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className={`p-2 rounded flex items-center ${isDarkMode 
-              ? 'bg-gray-700 hover:bg-gray-600 text-white' 
-              : 'bg-gray-200 hover:bg-gray-300 text-black'}`}
-          >
-            {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
-          </button>
-        </div>
+        <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}></DarkModeToggle>
       </div>
     </div>
   );
