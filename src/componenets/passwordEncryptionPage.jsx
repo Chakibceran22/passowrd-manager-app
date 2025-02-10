@@ -7,6 +7,7 @@ import SelectionDropDown from './SelectionDropDown';
 import RsaPublicKeyDisplay from './RsaPublicKeyDisplay';
 import DarkModeToggle from './ToggleButton';
 import KeyInput from './KeyInput';
+import BackButton from './BackButton';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -101,7 +102,6 @@ const PasswordEncryptor = () => {
           }
         }).join('');
 
-
         break;
 
       default:
@@ -121,17 +121,18 @@ const PasswordEncryptor = () => {
       <div className={`w-full max-w-md p-8 rounded-xl shadow-2xl border-2 ${isDarkMode 
         ? 'bg-gray-800 border-gray-700' 
         : 'bg-white border-gray-200'}`}>
-        <div className="flex items-center mb-6">
-          <ShieldIcon className={`mr-4 w-12 h-12 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
-          <h1 className="text-3xl font-bold">Advanced Encryption Tool</h1>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <ShieldIcon className={`mr-4 w-12 h-12 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
+            <h1 className="text-3xl font-bold">Advanced Encryption Tool</h1>
+          </div>
+          <BackButton isDarkMode={isDarkMode}/>
         </div>
 
         <div className="space-y-4">
           {/* Encryption Method Selector */}
           <SelectionDropDown encryptionType={encryptionType} encryptionMethods={encryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setEncryptionKey} setEncryptionType={setEncryptionType} setGeneratedPublicKey={setGeneratedPublicKey} notice={"Encryption Method"}/>
           <Input placeholder={"Plain Password"} password={plainPassword} setPassword={setPlainPassword} isDarkMode={isDarkMode}></Input>
-
-          
 
           {/* Non-RSA Key Input */}
           {encryptionType !== 'RSA' && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (

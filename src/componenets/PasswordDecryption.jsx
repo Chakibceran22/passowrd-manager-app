@@ -5,7 +5,8 @@ import Button from './Button';
 import Input from './Input';
 import SelectionDropDown from './SelectionDropDown';
 import DarkModeToggle from './ToggleButton';
-
+import KeyInput from './KeyInput';
+import BackButton from './BackButton';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -113,6 +114,7 @@ const PasswordDecryptor = () => {
         <div className="flex items-center mb-6">
           <ShieldIcon className={`mr-4 w-12 h-12 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
           <h1 className="text-3xl font-bold">Advanced Decryption Tool</h1>
+          <BackButton isDarkMode={isDarkMode}/>
         </div>
 
         <div className="space-y-4">
@@ -159,21 +161,7 @@ const PasswordDecryptor = () => {
 
           {/* Conditional Key Input for other methods */}
           {decryptionType !== 'rsa' && decryptionMethods.find(m => m.value === decryptionType)?.requiresKey && (
-            <div>
-              <label className="block mb-2 flex items-center">
-                <KeyIcon className="mr-2 w-5 h-5" />
-                Decryption Key
-              </label>
-              <input 
-                type="text"
-                value={decryptionKey}
-                onChange={(e) => setDecryptionKey(e.target.value)}
-                placeholder="Enter decryption key"
-                className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
-                  ? 'bg-gray-700 border-gray-600 text-white' 
-                  : 'bg-white border-gray-300 text-black'}`}
-              />
-            </div>
+            <KeyInput isDarkMode={isDarkMode} setKey={setDecryptionKey} Key={decryptionKey} notice={"Decryption Key"} />
           )}
 
           <Button handleEvent={handleDecrypt} password={encryptedPassword} word={"Decrypt"} isDarkMode={isDarkMode}></Button>
