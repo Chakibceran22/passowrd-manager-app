@@ -75,7 +75,7 @@ const PasswordHasher = () => {
             <select 
               value={hashType}
               onChange={(e) => setHashType(e.target.value)}
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+              className={`w-full p-3 rounded-lg border-2 transform transition-all duration-300  ${isDarkMode 
                 ? 'bg-gray-700 border-gray-600 text-white' 
                 : 'bg-white border-gray-300 text-black'}`}
             >
@@ -92,14 +92,14 @@ const PasswordHasher = () => {
 
           {/* Hashed Result */}
           {hashedPassword && (
-            <div className={`p-4 rounded-lg break-words ${isDarkMode 
+            <div className={`p-4 rounded-lg break-words transform transition-all duration-300  ${isDarkMode 
               ? 'bg-gray-700' 
               : 'bg-gray-100'}`}>
               <div className="flex justify-between items-center mb-2">
                 <strong>Hashed Result:</strong>
                 <button 
                   onClick={copyToClipboard}
-                  className={`px-2 py-1 rounded ${isDarkMode 
+                  className={`px-2 py-1 rounded transform transition-all duration-300  ${isDarkMode 
                     ? 'bg-blue-700 hover:bg-blue-600' 
                     : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
                 >
