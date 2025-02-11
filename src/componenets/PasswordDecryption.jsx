@@ -10,6 +10,7 @@ import BackButton from './BackButton';
 import { decryptAffine } from '../encModules/affine';
 import { useEffect } from 'react';
 import Result from './Result';
+import { decryptRot13 } from '../encModules/rot13';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -55,15 +56,7 @@ const PasswordDecryptor = () => {
         }
 
       case 'ROT13':
-        result = encryptedPassword.split('').map(char => {
-          if (char >= 'a' && char <= 'z') {
-            return String.fromCharCode((char.charCodeAt(0) - 'a'.charCodeAt(0) + 13) % 26 + 'a'.charCodeAt(0));
-          }
-          else if (char >= 'A' && char <= 'Z') {
-            return String.fromCharCode((char.charCodeAt(0) - 'A'.charCodeAt(0) + 13) % 26 + 'A'.charCodeAt(0));
-          }
-          return char;
-        }).join('');
+        result = decryptRot13(encryptedPassword);
         break;
 
       case 'xorCipher':

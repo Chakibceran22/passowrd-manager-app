@@ -11,6 +11,7 @@ import KeyInput from './KeyInput';
 import BackButton from './BackButton';
 import PasswordInput from './PasswordInput';
 import Result from './Result';
+import { encryptRot13 } from '../encModules/rot13';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -50,27 +51,7 @@ const PasswordEncryptor = () => {
         result = btoa(JSON.stringify(encryptedMessage));
         break;
       case 'ROT13':
-
-        result = plainPassword.split('').map(char => {
-          if (char >= 'a' && char <= 'z') {
-            return String.fromCharCode((char.charCodeAt(0) - 'a'.charCodeAt(0) + 13) % 26 + 'a'.charCodeAt(0));
-          }
-          else if (char >= 'A' && char <= 'Z') {
-            return String.fromCharCode((char.charCodeAt(0) - 'A'.charCodeAt(0) + 13) % 26 + 'A'.charCodeAt(0));
-          }
-          return char;
-        }).join('');
-        const resultdecrcypher = result.split('').map(char => {
-          if (char >= 'a' && char <= 'z') {
-            return String.fromCharCode((char.charCodeAt(0) - 'a'.charCodeAt(0) + 13) % 26 + 'a'.charCodeAt(0));
-          }
-          else if (char >= 'A' && char <= 'Z') {
-            return String.fromCharCode((char.charCodeAt(0) - 'A'.charCodeAt(0) + 13) % 26 + 'A'.charCodeAt(0));
-          }
-
-          return char;
-        }).join('');
-        console.log(resultdecrcypher)
+        result = encryptRot13(plainPassword);
         break;
 
       case 'xorCipher':
@@ -80,8 +61,7 @@ const PasswordEncryptor = () => {
         }
         result = btoa(plainPassword.split('').map((char, index) => {
           return String.fromCharCode(char.charCodeAt(0) ^ encryptionKey.charCodeAt(index % encryptionKey.length));
-        })
-          .join(''));
+        }).join(''));
 
         break;
 
@@ -98,7 +78,6 @@ const PasswordEncryptor = () => {
           result = 'Key required for Vigenère Cipher';
           break;
         }
-
         result = plainPassword.split('').map((char, index) => {
           if (char.match(/[a-z]/i)) {
             const base = char <= 'Z' ? 65 : 97;
