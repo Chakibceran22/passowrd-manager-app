@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ShieldIcon, KeyIcon } from './SecurityIcons';
+import { ShieldIcon } from './SecurityIcons';
 import { calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, n, totient } from '../encModules/rsa';
-import { encryptAffine, decryptAffine } from '../encModules/affine';
+import { encryptAffine} from '../encModules/affine';
+import { useEffect } from 'react';
 import Button from './Button';
 import SelectionDropDown from './SelectionDropDown';
 import RsaPublicKeyDisplay from './RsaPublicKeyDisplay';
@@ -21,7 +22,9 @@ const PasswordEncryptor = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [showEncrypted, setShowEncrypted] = useState(false);
-
+  useEffect(() => {
+    document.title = "Advanced Encryption Tool"
+  })
   const encryptionMethods = [
     { value: 'ROT13', label: 'ROT 13', requiresKey: false },
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },
