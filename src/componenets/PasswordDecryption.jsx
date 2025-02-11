@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import Result from './Result';
 import { decryptXor } from '../encModules/xorCypher';
 import { decryptRot13 } from '../encModules/rot13';
-
+import { decryptVigener} from '../encModules/vigenere';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -82,15 +82,7 @@ const PasswordDecryptor = () => {
           result = 'Key required for Vigenère Cipher';
           break;
         }
-        result = encryptedPassword.split('').map((char, index) => {
-          if (char.match(/[a-z]/i)) {
-            const cNum = char.charCodeAt(0);
-            const kNum = decryptionKey.charCodeAt(index % decryptionKey.length);
-            const base = char <= 'Z' ? 65 : 97;
-            return String.fromCharCode((cNum - kNum + 26) % 26 + base);
-          }
-          return char;
-        }).join('');
+        result = decryptVigener(encryptedPassword, decryptionKey);
         break;
       case 'Affine': {
         if (!decryptionKey) {
@@ -131,7 +123,7 @@ const PasswordDecryptor = () => {
         </div>
 
         <div className="space-y-4">
-          <Input placeholder={"Decryption Text:"} password={encryptedPassword} isDarkMode={isDarkMode} setPassword={setDecryptedPassword} />
+          <Input placeholder={"Decryption Text:"} password={encryptedPassword} isDarkMode={isDarkMode} setPassword={setEncryptedPassword} />
           <SelectionDropDown encryptionType={decryptionType} encryptionMethods={decryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setDecryptionKey} setEncryptionType={setDecryptionType} setGeneratedPublicKey={setPrivateKey} notice={"Deryption Method"} />
 
 
