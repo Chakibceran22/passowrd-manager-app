@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ShieldIcon, KeyIcon, LockIcon, EyeIcon, EyeOffIcon } from './SecurityIcons';
 import DarkModeToggle from './ToggleButton';
 import Button from './Button';
@@ -12,7 +12,9 @@ const PasswordHasher = () => {
   const [hashType, setHashType] = useState('base64');
   const [showPassword, setShowPassword] = useState(false);
   const [salt, setSalt] = useState('');
-
+  useEffect(() => {
+    document.title = 'Password Hasher';
+  })
   const hashingMethods = [
     { value: 'base64', label: 'Base64 Encoding' },
     { value: 'simple', label: 'Simple Hash' },

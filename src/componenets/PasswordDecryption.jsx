@@ -8,6 +8,7 @@ import DarkModeToggle from './ToggleButton';
 import KeyInput from './KeyInput';
 import BackButton from './BackButton';
 import { decryptAffine } from '../encModules/affine';
+import { useEffect } from 'react';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -18,7 +19,9 @@ const PasswordDecryptor = () => {
   const [decryptedPassword, setDecryptedPassword] = useState('');
   const [decryptionType, setDecryptionType] = useState('ROT13');
   const [showDecrypted, setShowDecrypted] = useState(false);
-
+  useEffect(() => {
+    document.title = "Advanced Decryption Tool"
+  })
   const decryptionMethods = [
     { value: 'ROT13', label: 'ROT 13', requiresKey: false },
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },

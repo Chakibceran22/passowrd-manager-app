@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShieldIcon, LockIcon, KeyIcon } from './SecurityIcons';
 import FeatureCard from './FeatureCard';
@@ -8,7 +8,9 @@ import SecurityWarning from './SecurityWarning';
 const SecurityLandingPage = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    document.title = "Security Tools"
+  })
  
 
   return (
