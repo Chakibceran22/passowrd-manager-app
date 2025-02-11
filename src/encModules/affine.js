@@ -1,7 +1,6 @@
 import { mod } from "mathjs"
-import {modInv} from "mathjs"
 
-const encrypt = (plainText, a, b) => {
+const encryptAffine = (plainText, a, b) => {
     let cipherText = '';
     for (let i = 0; i < plainText.length ; i++)
     {
@@ -17,8 +16,7 @@ const encrypt = (plainText, a, b) => {
     }
     return cipherText;
 }
-const keya = 21
-const decrypt = (cipherText, a, b) => {
+const decryptAffine = (cipherText, a, b) => {
     let plainText = '';
     for (let i = 0; i < cipherText.length ; i++)
     {
@@ -36,4 +34,4 @@ const decrypt = (cipherText, a, b) => {
     return plainText;
 }
 
-export { encrypt, decrypt }
+export { encryptAffine, decryptAffine }
