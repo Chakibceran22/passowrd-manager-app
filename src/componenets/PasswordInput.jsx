@@ -1,10 +1,10 @@
-import { KeyIcon, EyeIcon,EyeOffIcon } from "./SecurityIcons"
+import {  EyeIcon,EyeOffIcon,LockIcon } from "./SecurityIcons"
 
 const PasswordInput = ({ showPassword,  isDarkMode, setPassword, password,setShowPassword}) => {
     return (
                   <div className="relative">
                     <label className="block mb-2 flex items-center">
-                      <KeyIcon className="mr-2 w-5 h-5" />
+                      <LockIcon className="mr-2 w-5 h-5" />
                       Password
                     </label>
                     <div className="relative">

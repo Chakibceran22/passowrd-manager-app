@@ -5,7 +5,7 @@ const KeyInput = ({ isDarkMode, setKey, Key, notice }) => {
     <div>
       <label className="block mb-2 flex items-center">
         <KeyIcon className="mr-2 w-5 h-5" />
-        Encryption Key
+        {notice}
       </label>
       <input
         type="text"
