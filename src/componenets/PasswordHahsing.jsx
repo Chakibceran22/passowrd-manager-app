@@ -52,13 +52,13 @@ const PasswordHasher = () => {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
-      <div className={`w-full max-w-md p-8 rounded-xl shadow-2xl border-2 ${isDarkMode 
+    <div className={`min-h-screen flex items-center justify-center transform transition-all duration-300 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+      <div className={`w-full max-w-md p-8 rounded-xl shadow-2xl border-2 transform transition-all duration-300 ${isDarkMode 
         ? 'bg-gray-800 border-gray-700' 
         : 'bg-white border-gray-200'}`}>
         <div className="flex items-center mb-6">
-          <ShieldIcon className={`mr-4 w-12 h-12 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
-          <h1 className="text-3xl font-bold">Secure Hash Generator</h1>
+          <ShieldIcon className={`mr-4 w-12 h-12 transform transition-all duration-300 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
+          <h1 className="text-3xl font-bold transform transition-all duration-300">Secure Hash Generator</h1>
           <BackButton isDarkMode={isDarkMode} />
         </div>
 
@@ -75,7 +75,7 @@ const PasswordHasher = () => {
             <select 
               value={hashType}
               onChange={(e) => setHashType(e.target.value)}
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+              className={`w-full p-3 rounded-lg border-2 transform transition-all duration-300  ${isDarkMode 
                 ? 'bg-gray-700 border-gray-600 text-white' 
                 : 'bg-white border-gray-300 text-black'}`}
             >
@@ -92,14 +92,14 @@ const PasswordHasher = () => {
 
           {/* Hashed Result */}
           {hashedPassword && (
-            <div className={`p-4 rounded-lg break-words ${isDarkMode 
+            <div className={`p-4 rounded-lg break-words transform transition-all duration-300  ${isDarkMode 
               ? 'bg-gray-700' 
               : 'bg-gray-100'}`}>
               <div className="flex justify-between items-center mb-2">
                 <strong>Hashed Result:</strong>
                 <button 
                   onClick={copyToClipboard}
-                  className={`px-2 py-1 rounded ${isDarkMode 
+                  className={`px-2 py-1 rounded transform transition-all duration-300  ${isDarkMode 
                     ? 'bg-blue-700 hover:bg-blue-600' 
                     : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
                 >

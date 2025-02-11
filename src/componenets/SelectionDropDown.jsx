@@ -1,7 +1,7 @@
 const SelectionDropDown = ({ encryptionType, encryptionMethods, isDarkMode, setEncryptionKey, setEncryptionType, setGeneratedPublicKey, notice}) => {
     return (
         <div>
-            <label className="block mb-2">{notice}</label>
+            <label className="block mb-2 transform transition-all duration-300">{notice}</label>
             <select
                 value={encryptionType}
                 onChange={(e) => {
@@ -9,7 +9,7 @@ const SelectionDropDown = ({ encryptionType, encryptionMethods, isDarkMode, setE
                     setEncryptionKey('');
                     setGeneratedPublicKey('');
                 }}
-                className={`w-full p-3 rounded-lg border-2 ${isDarkMode
+                className={`w-full p-3 rounded-lg border-2 transform transition-all duration-300 ${isDarkMode
                     ? 'bg-gray-700 border-gray-600 text-white'
                     : 'bg-white border-gray-300 text-black'}`}
             >

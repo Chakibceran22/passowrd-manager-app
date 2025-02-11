@@ -10,6 +10,7 @@ import DarkModeToggle from './ToggleButton';
 import KeyInput from './KeyInput';
 import BackButton from './BackButton';
 import PasswordInput from './PasswordInput';
+import Result from './Result';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -136,13 +137,13 @@ const PasswordEncryptor = () => {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
-      <div className={`w-full max-w-md p-8 rounded-xl shadow-2xl border-2 ${isDarkMode
+    <div className={`min-h-screen flex items-center justify-center transform transition-all duration-300 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+      <div className={`w-full max-w-md p-8 rounded-xl shadow-2xl border-2 transform transition-all duration-300 ${isDarkMode
         ? 'bg-gray-800 border-gray-700'
         : 'bg-white border-gray-200'}`}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
-            <ShieldIcon className={`mr-4 w-12 h-12 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
+            <ShieldIcon className={`mr-4 w-12 h-12 transform transition-all duration-300 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
             <h1 className="text-3xl font-bold">Advanced Encryption Tool</h1>
           </div>
           <BackButton isDarkMode={isDarkMode} />
@@ -170,34 +171,7 @@ const PasswordEncryptor = () => {
 
           {/* Encrypted Result */}
           {encryptedPassword && (
-            <div className={`p-4 rounded-lg break-words ${isDarkMode
-              ? 'bg-gray-700'
-              : 'bg-gray-100'}`}>
-              <div className="flex justify-between items-center mb-2">
-                <strong>Encrypted Result:{(encryptionType == 'RSA' || encryptionType == 'xorCipher') && <p>Note: Result in Base64</p>}</strong>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => copyToClipboard(encryptedPassword)}
-                    className={`px-2 py-1 rounded ${isDarkMode
-                      ? 'bg-blue-700 hover:bg-blue-600'
-                      : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
-                  >
-                    Copy
-                  </button>
-                  <button
-                    onClick={() => setShowEncrypted(!showEncrypted)}
-                    className={`px-2 py-1 rounded ${isDarkMode
-                      ? 'bg-green-700 hover:bg-green-600'
-                      : 'bg-green-500 hover:bg-green-600 text-white'}`}
-                  >
-                    {showEncrypted ? 'Hide' : 'Show'}
-                  </button>
-                </div>
-              </div>
-              <p className="break-all">
-                {showEncrypted ? encryptedPassword : '*'.repeat(encryptedPassword.length)}
-              </p>
-            </div>
+           <Result isDarkMode={isDarkMode} notice={"Encrypted Password"} copyToClipboard={copyToClipboard} setShowResult={setShowEncrypted} showText={showEncrypted} text={encryptedPassword} />
           )}
         </div>
 
