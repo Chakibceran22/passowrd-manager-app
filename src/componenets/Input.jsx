@@ -7,7 +7,7 @@ const Input = ({placeholder, password, isDarkMode ,setPassword}) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter encrypted text"
-              className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
+              className={`w-full p-3 rounded-lg border-2 transform transition-all duration-300 ${isDarkMode 
                 ? 'bg-gray-700 border-gray-600 text-white' 
                 : 'bg-white border-gray-300 text-black'}`}
             />

@@ -3,7 +3,7 @@ import {  EyeIcon,EyeOffIcon,LockIcon } from "./SecurityIcons"
 const PasswordInput = ({ showPassword,  isDarkMode, setPassword, password,setShowPassword}) => {
     return (
                   <div className="relative">
-                    <label className="block mb-2 flex items-center">
+                    <label className="block mb-2 flex items-center transform transition-all duration-300">
                       <LockIcon className="mr-2 w-5 h-5" />
                       Password
                     </label>
@@ -13,7 +13,7 @@ const PasswordInput = ({ showPassword,  isDarkMode, setPassword, password,setSho
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter password to hash"
-                        className={`w-full p-3 rounded-lg border-2 pr-10 ${isDarkMode 
+                        className={`w-full p-3 rounded-lg border-2 pr-10 transform transition-all duration-300 ${isDarkMode 
                           ? 'bg-gray-700 border-gray-600 text-white' 
                           : 'bg-white border-gray-300 text-black'}`}
                       />

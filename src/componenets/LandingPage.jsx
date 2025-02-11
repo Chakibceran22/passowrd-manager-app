@@ -14,7 +14,7 @@ const SecurityLandingPage = () => {
  
 
   return (
-    <div className={`min-h-screen ${isDarkMode
+    <div className={`min-h-screen transform transition-all duration-300 ${isDarkMode
         ? 'bg-gray-900 text-white'
         : 'bg-gray-100 text-black'
       }`}>
@@ -27,7 +27,7 @@ const SecurityLandingPage = () => {
           <h2 className="text-4xl font-bold mb-6">
             Secure Your Digital Secrets
           </h2>
-          <p className={`max-w-2xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'
+          <p className={`max-w-2xl mx-auto transform transition-all duration-300 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'
             }`}>
             Powerful tools for password management and encryption.
             Protect your sensitive information with advanced security techniques.

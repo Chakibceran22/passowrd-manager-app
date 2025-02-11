@@ -6,7 +6,7 @@ const Button = ({ handleEvent, password, word, isDarkMode }) => {
         <button
             onClick={handleEvent}
             disabled={!password}
-            className={`w-full p-3 rounded-lg transition duration-300 ${password
+            className={`w-full p-3 rounded-lg transform transition-all duration-300 ${password
                     ? (isDarkMode
                         ? 'bg-purple-700 hover:bg-purple-600 text-white'
                         : 'bg-purple-500 hover:bg-purple-600 text-white')

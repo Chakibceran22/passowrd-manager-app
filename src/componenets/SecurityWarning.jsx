@@ -1,6 +1,6 @@
 const SecurityWarning = ({isDarkMode}) => {
     return(
-        <div className={`mt-16 p-6 rounded-xl text-center ${isDarkMode
+        <div className={`mt-16 p-6 rounded-xl text-center transform transition-all duration-300 ${isDarkMode
             ? 'bg-red-900 bg-opacity-30 text-red-300'
             : 'bg-red-100 text-red-700'
           }`}>

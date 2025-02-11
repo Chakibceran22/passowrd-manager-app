@@ -3,7 +3,7 @@ import { LockIcon } from './SecurityIcons';
 
 const SaltInput = ({isDarkMode, salt, setSalt}) => {
     return(<div>
-                <label className="block mb-2 flex items-center">
+                <label className="block mb-2 flex items-center transform transition-all duration-300">
                   <LockIcon className="mr-2 w-5 h-5" />
                   Salt (Optional)
                 </label>
@@ -11,7 +11,7 @@ const SaltInput = ({isDarkMode, salt, setSalt}) => {
                   type="text"
                   value={salt}
                   onChange={(e) => setSalt(e.target.value)}
-                  placeholder="Add extra security with a salt"
+                  placeholder="Add extra security with a salt transform transition-all duration-300"
                   className={`w-full p-3 rounded-lg border-2 ${isDarkMode 
                     ? 'bg-gray-700 border-gray-600 text-white' 
                     : 'bg-white border-gray-300 text-black'}`}

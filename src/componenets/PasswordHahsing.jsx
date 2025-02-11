@@ -52,13 +52,13 @@ const PasswordHasher = () => {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
-      <div className={`w-full max-w-md p-8 rounded-xl shadow-2xl border-2 ${isDarkMode 
+    <div className={`min-h-screen flex items-center justify-center transform transition-all duration-300 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'}`}>
+      <div className={`w-full max-w-md p-8 rounded-xl shadow-2xl border-2 transform transition-all duration-300 ${isDarkMode 
         ? 'bg-gray-800 border-gray-700' 
         : 'bg-white border-gray-200'}`}>
         <div className="flex items-center mb-6">
-          <ShieldIcon className={`mr-4 w-12 h-12 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
-          <h1 className="text-3xl font-bold">Secure Hash Generator</h1>
+          <ShieldIcon className={`mr-4 w-12 h-12 transform transition-all duration-300 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`} />
+          <h1 className="text-3xl font-bold transform transition-all duration-300">Secure Hash Generator</h1>
           <BackButton isDarkMode={isDarkMode} />
         </div>
 
