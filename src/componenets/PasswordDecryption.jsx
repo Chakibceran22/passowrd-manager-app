@@ -7,6 +7,7 @@ import SelectionDropDown from './SelectionDropDown';
 import DarkModeToggle from './ToggleButton';
 import KeyInput from './KeyInput';
 import BackButton from './BackButton';
+import { decryptAffine } from '../encModules/affine';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -23,7 +24,8 @@ const PasswordDecryptor = () => {
     { value: 'xorCipher', label: 'XOR Cipher', requiresKey: true },
     { value: 'base64', label: 'Base64', requiresKey: false },
     { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true },
-    { value: 'rsa', label: 'RSA', requiresKey: true }
+    { value: 'rsa', label: 'RSA', requiresKey: true },
+    {value : "Affine", label: "Affine Cipher", requiresKey: true},
   ];
 
   const handleDecrypt = () => {
@@ -94,6 +96,22 @@ const PasswordDecryptor = () => {
           return char;
         }).join('');
         break;
+        case 'Affine':{
+          if(!decryptionKey){
+            result = 'Key required for Affine Cipher';
+            break;
+          }
+          else{
+            const [a, b] = decryptionKey.split(',').map(Number);
+            if(isNaN(a) || isNaN(b)){
+              result = 'Invalid key for Affine Cipher';
+              break;
+            }
+            result = decryptAffine(encryptedPassword, a, b);
+            break;
+            
+          }
+        }
 
       default:
         result = 'Invalid decryption method';
@@ -160,8 +178,11 @@ const PasswordDecryptor = () => {
           )}
 
           {/* Conditional Key Input for other methods */}
-          {decryptionType !== 'rsa' && decryptionMethods.find(m => m.value === decryptionType)?.requiresKey && (
+          {decryptionType !== 'rsa' && decryptionType!=="Affine" && decryptionMethods.find(m => m.value === decryptionType)?.requiresKey && (
             <KeyInput isDarkMode={isDarkMode} setKey={setDecryptionKey} Key={decryptionKey} notice={"Decryption Key"} />
+          )}
+          {decryptionType === "Affine" && (
+            <KeyInput isDarkMode={isDarkMode} setKey={setDecryptionKey} Key={decryptionKey} notice={"Enter a and b for the affine cipher seperate by , "} />
           )}
 
           <Button handleEvent={handleDecrypt} password={encryptedPassword} word={"Decrypt"} isDarkMode={isDarkMode}></Button>
