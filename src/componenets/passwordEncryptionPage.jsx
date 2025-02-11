@@ -13,6 +13,8 @@ import PasswordInput from './PasswordInput';
 import Result from './Result';
 import { encryptRot13 } from '../encModules/rot13';
 import { encryptXor } from '../encModules/xorCypher';
+import { encryptVigener } from '../encModules/vigenere';
+
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -77,15 +79,7 @@ const PasswordEncryptor = () => {
           result = 'Key required for Vigenère Cipher';
           break;
         }
-        result = plainPassword.split('').map((char, index) => {
-          if (char.match(/[a-z]/i)) {
-            const base = char <= 'Z' ? 65 : 97;
-            const pNum = char.charCodeAt(0)
-            const kNum = encryptionKey.charCodeAt(index % encryptionKey.length);
-            return String.fromCharCode(((pNum - base) + (kNum - base)) % 26 + base);
-          }
-        }).join('');
-
+        result = encryptVigener(plainPassword, encryptionKey);
         break;
         case 'Affine':
           if(!encryptionKey){
