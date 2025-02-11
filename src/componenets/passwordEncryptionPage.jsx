@@ -12,6 +12,7 @@ import BackButton from './BackButton';
 import PasswordInput from './PasswordInput';
 import Result from './Result';
 import { encryptRot13 } from '../encModules/rot13';
+import { encryptXor } from '../encModules/xorCypher';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -59,9 +60,7 @@ const PasswordEncryptor = () => {
           result = 'Key required for XOR Cipher';
           break;
         }
-        result = btoa(plainPassword.split('').map((char, index) => {
-          return String.fromCharCode(char.charCodeAt(0) ^ encryptionKey.charCodeAt(index % encryptionKey.length));
-        }).join(''));
+        result = btoa(encryptXor(plainPassword, encryptionKey));
 
         break;
 

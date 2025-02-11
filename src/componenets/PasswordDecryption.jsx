@@ -10,6 +10,7 @@ import BackButton from './BackButton';
 import { decryptAffine } from '../encModules/affine';
 import { useEffect } from 'react';
 import Result from './Result';
+import { decryptXor } from '../encModules/xorCypher';
 import { decryptRot13 } from '../encModules/rot13';
 
 const PasswordDecryptor = () => {
@@ -64,10 +65,7 @@ const PasswordDecryptor = () => {
           result = 'Key required for XOR Cipher';
           break;
         }
-        result = atob(encryptedPassword).split('').map((char, index) => {
-          const keyChar = decryptionKey[index % decryptionKey.length];
-          return String.fromCharCode(char.charCodeAt(0) ^ keyChar.charCodeAt(0));
-        }).join('');
+        result = decryptXor(atob(encryptedPassword), decryptionKey);
         break;
 
       case 'base64':
@@ -106,7 +104,6 @@ const PasswordDecryptor = () => {
             }
             result = decryptAffine(encryptedPassword, a, b);
             break;
-            
           }
         }
 
