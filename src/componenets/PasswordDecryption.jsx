@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import Result from './Result';
 import { decryptXor } from '../encModules/xorCypher';
 import { decryptRot13 } from '../encModules/rot13';
-import { decryptVigener} from '../encModules/vigenere';
+import { decryptVigener } from '../encModules/vigenere';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -131,7 +131,7 @@ const PasswordDecryptor = () => {
           {decryptionType === 'rsa' && (
             <div className="space-y-4">
               <div>
-                <label className="block mb-2 flex items-center ">
+                <label className=" mb-2 flex items-center ">
                   <KeyIcon className="mr-2 w-5 h-5 transform transition-all duration-300" />
                   Private Key (d)
                 </label>
@@ -146,7 +146,7 @@ const PasswordDecryptor = () => {
                 />
               </div>
               <div>
-                <label className="block mb-2 flex items-center">
+                <label className=" mb-2 flex items-center">
                   <KeyIcon className="mr-2 w-5 h-5" />
                   Modulus (n)
                 </label>

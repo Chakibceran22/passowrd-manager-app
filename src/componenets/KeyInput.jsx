@@ -3,7 +3,7 @@ import { KeyIcon } from "./SecurityIcons";
 const KeyInput = ({ isDarkMode, setKey, Key, notice }) => {
   return (
     <div>
-      <label className="block mb-2 flex items-center transform transition-all duration-300">
+      <label className=" mb-2 flex items-center transform transition-all duration-300">
         <KeyIcon className="mr-2 w-5 h-5 " />
         {notice}
       </label>
