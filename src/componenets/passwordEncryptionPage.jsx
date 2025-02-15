@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldIcon } from './SecurityIcons';
 import { calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, n, totient } from '../encModules/rsa';
-import { encryptAffine} from '../encModules/affine';
+import { encryptAffine } from '../encModules/affine';
 import { useEffect } from 'react';
 import Button from './Button';
 import SelectionDropDown from './SelectionDropDown';
@@ -14,6 +14,7 @@ import Result from './Result';
 import { encryptRot13 } from '../encModules/rot13';
 import { encryptXor } from '../encModules/xorCypher';
 import { encryptVigener } from '../encModules/vigenere';
+import { encryptCeasar } from '../encModules/ceasar';
 
 
 const PasswordEncryptor = () => {
@@ -37,6 +38,7 @@ const PasswordEncryptor = () => {
     { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true },
     { value: 'RSA', label: "RSA", requiresKey: true },
     { value: "Affine", label: "Affine Cipher", requiresKey: true },
+    { value: "Ceasar", label: "Ceasar Cipher", requiresKey: true },
   ];
 
   const handleEncrypt = () => {
@@ -81,21 +83,37 @@ const PasswordEncryptor = () => {
         }
         result = encryptVigener(plainPassword, encryptionKey);
         break;
-        case 'Affine':
-          if(!encryptionKey){
-            result = 'Key required for Affine Cipher';
+      case 'Affine':
+        if (!encryptionKey) {
+          result = 'Key required for Affine Cipher';
+          break;
+        }
+        else {
+          const [a, b] = encryptionKey.split(',').map(Number);
+          if (isNaN(a) || isNaN(b)) {
+            result = 'Invalid key for Affine Cipher';
             break;
-          } 
-          else{
-            const [a, b] = encryptionKey.split(',').map(Number);
-            if(isNaN(a) || isNaN(b)){
-              result = 'Invalid key for Affine Cipher';
-              break;
-            }
-            result = encryptAffine(plainPassword, a, b);
-            break
           }
-          
+          result = encryptAffine(plainPassword, a, b);
+          break
+        }
+      case 'Ceasar':
+        const key = parseInt(encryptionKey);
+        if (isNaN(key)) {
+          console.log("im here")
+          result = 'Invalid key for Ceasar Cipher';
+          break;
+        }
+        try {
+          result = encryptCeasar(plainPassword,key );
+          break;
+        }
+        catch (err) {
+          result = 'Ceasar encryption failed';
+          console.log(err)
+          break;
+        }
+
       default:
         result = 'Invalid encryption method';
         console.log(encryptionType)
@@ -143,7 +161,7 @@ const PasswordEncryptor = () => {
 
           {/* Encrypted Result */}
           {encryptedPassword && (
-           <Result isDarkMode={isDarkMode} notice={"Encrypted Password"} copyToClipboard={copyToClipboard} setShowResult={setShowEncrypted} showText={showEncrypted} text={encryptedPassword} />
+            <Result isDarkMode={isDarkMode} notice={"Encrypted Password"} copyToClipboard={copyToClipboard} setShowResult={setShowEncrypted} showText={showEncrypted} text={encryptedPassword} />
           )}
         </div>
 
