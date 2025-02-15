@@ -15,7 +15,9 @@ import { encryptRot13 } from '../encModules/rot13';
 import { encryptXor } from '../encModules/xorCypher';
 import { encryptVigener } from '../encModules/vigenere';
 import { encryptCeasar } from '../encModules/ceasar';
-
+import { encryptHill } from '../encModules/hiil';
+import { reshape, matrix } from 'mathjs';
+import HillMatrixInput from './HillMatrixInput';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -26,6 +28,10 @@ const PasswordEncryptor = () => {
   const [generatedPublicKey, setGeneratedPublicKey] = useState('');
   const [generatedPrivaetKey, setGeneratedPrivateKey] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [hillMatrix, setHillMatrix] = useState([
+    ['', ''],
+    ['', '']
+  ]);
 
   const [showEncrypted, setShowEncrypted] = useState(false);
   useEffect(() => {
@@ -39,7 +45,15 @@ const PasswordEncryptor = () => {
     { value: 'RSA', label: "RSA", requiresKey: true },
     { value: "Affine", label: "Affine Cipher", requiresKey: true },
     { value: "Ceasar", label: "Ceasar Cipher", requiresKey: true },
+    { value: "Hill", label: "Hill Cipher", requiresKey: true }
   ];
+
+  const handleHillMatrixChange = (row, col, value) => {
+    const newMatrix = [...hillMatrix];
+    newMatrix[row][col] = value;
+    setHillMatrix(newMatrix);
+  };
+  
 
   const handleEncrypt = () => {
     let result = '';
@@ -105,7 +119,7 @@ const PasswordEncryptor = () => {
           break;
         }
         try {
-          result = encryptCeasar(plainPassword,key );
+          result = encryptCeasar(plainPassword, key);
           break;
         }
         catch (err) {
@@ -113,6 +127,17 @@ const PasswordEncryptor = () => {
           console.log(err)
           break;
         }
+        case 'Hill':
+          try{
+            
+            const hillKey = matrix(reshape(hillMatrix.map(row => row.map(cell => parseInt(cell))),[2,2]));
+            result = encryptHill(plainPassword, hillKey, '#');
+            break
+          }catch(err){
+            result = 'Invalid Hill Key';
+            console.log(err)
+            break;
+          }
 
       default:
         result = 'Invalid encryption method';
@@ -143,8 +168,24 @@ const PasswordEncryptor = () => {
           {/* Encryption Method Selector */}
           <SelectionDropDown encryptionType={encryptionType} encryptionMethods={encryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setEncryptionKey} setEncryptionType={setEncryptionType} setGeneratedPublicKey={setGeneratedPublicKey} notice={"Encryption Method"} />
           <PasswordInput isDarkMode={isDarkMode} setPassword={setPlainPassword} password={plainPassword} showPassword={showPassword} setShowPassword={setShowPassword} />
+          
+          {encryptionType === 'Hill' ? (
+            <HillMatrixInput isDarkMode={isDarkMode} hillMatrix={hillMatrix} handleHillMatrixChange={handleHillMatrixChange} />
+          ) : (
+            encryptionType !== 'RSA' &&
+            encryptionType !== "Affine" &&
+            encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
+              <KeyInput
+                isDarkMode={isDarkMode}
+                setKey={setEncryptionKey}
+                Key={encryptionKey}
+                notice={"Encryption Key"}
+              />
+            )
+          )}
+
           {/* Non-RSA Key Input */}
-          {encryptionType !== 'RSA' && encryptionType !== "Affine" && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
+          {encryptionType !== 'RSA' && encryptionType !== "Affine" && encryptionType !== "Hill" && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
             <KeyInput isDarkMode={isDarkMode} setKey={setEncryptionKey} Key={encryptionKey} notice={"Encryption Key"} />
           )}
           {/*Affine Key Display */}
