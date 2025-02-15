@@ -14,7 +14,8 @@ import { decryptXor } from '../encModules/xorCypher';
 import { decryptRot13 } from '../encModules/rot13';
 import { decryptVigener } from '../encModules/vigenere';
 import { decryptCeasar } from '../encModules/ceasar';
-
+import { decryptHill } from '../encModules/hiil';
+import { matrix, reshape } from 'mathjs';
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [encryptedPassword, setEncryptedPassword] = useState('');
@@ -24,6 +25,10 @@ const PasswordDecryptor = () => {
   const [decryptedPassword, setDecryptedPassword] = useState('');
   const [decryptionType, setDecryptionType] = useState('ROT13');
   const [showDecrypted, setShowDecrypted] = useState(false);
+  const [hillMatrix, setHillMatrix] = useState([
+    ['', ''],
+    ['', '']
+  ]);
   useEffect(() => {
     document.title = "Advanced Decryption Tool"
   })
@@ -35,7 +40,13 @@ const PasswordDecryptor = () => {
     { value: 'rsa', label: 'RSA', requiresKey: true },
     { value: "Affine", label: "Affine Cipher", requiresKey: true },
     { value: "Ceasar", label: "Ceasar Cipher", requiresKey: true },
+    { value: "Hill", label: "Hill Cipher", requiresKey: true }
   ];
+  const handleHillMatrixChange = (row, col, value) => {
+    const newMatrix = [...hillMatrix];
+    newMatrix[row][col] = value;
+    setHillMatrix(newMatrix);
+  } 
 
   const handleDecrypt = () => {
     let result = '';
