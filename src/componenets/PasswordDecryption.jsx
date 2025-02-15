@@ -16,6 +16,7 @@ import { decryptVigener } from '../encModules/vigenere';
 import { decryptCeasar } from '../encModules/ceasar';
 import { decryptHill } from '../encModules/hiil';
 import { matrix, reshape } from 'mathjs';
+import HillMatrixInput from './HillMatrixInput';
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [encryptedPassword, setEncryptedPassword] = useState('');
@@ -127,6 +128,19 @@ const PasswordDecryptor = () => {
           break
         }
       }
+      case 'Hill': {
+        try{
+          const hillKey = matrix(reshape(hillMatrix.map(row => row.map(cell => parseInt(cell))), [2, 2]));
+          result = decryptHill(encryptedPassword, hillKey);
+          break;
+        }
+        catch(err){
+          result = 'Hill decryption failed';
+          console.log(err)
+          break;
+        }
+        
+      }
 
       default:
         result = 'Invalid decryption method';
@@ -153,7 +167,9 @@ const PasswordDecryptor = () => {
         <div className="space-y-4">
           <Input placeholder={"Decryption Text:"} password={encryptedPassword} isDarkMode={isDarkMode} setPassword={setEncryptedPassword} />
           <SelectionDropDown encryptionType={decryptionType} encryptionMethods={decryptionMethods} isDarkMode={isDarkMode} setEncryptionKey={setDecryptionKey} setEncryptionType={setDecryptionType} setGeneratedPublicKey={setPrivateKey} notice={"Deryption Method"} />
-
+          {decryptionType === 'Hill' && (
+            <HillMatrixInput hillMatrix={hillMatrix} isDarkMode={isDarkMode} handleHillMatrixChange={handleHillMatrixChange} />
+          )}
 
           {/* RSA-specific inputs */}
           {decryptionType === 'rsa' && (
@@ -192,7 +208,7 @@ const PasswordDecryptor = () => {
           )}
 
           {/* Conditional Key Input for other methods */}
-          {decryptionType !== 'rsa' && decryptionType !== "Affine" && decryptionMethods.find(m => m.value === decryptionType)?.requiresKey && (
+          {decryptionType !== 'rsa' && decryptionType !== "Affine" && decryptionType !=='Hill' && decryptionMethods.find(m => m.value === decryptionType)?.requiresKey && (
             <KeyInput isDarkMode={isDarkMode} setKey={setDecryptionKey} Key={decryptionKey} notice={"Decryption Key"} />
           )}
           {decryptionType === "Affine" && (
