@@ -13,6 +13,7 @@ import Result from './Result';
 import { decryptXor } from '../encModules/xorCypher';
 import { decryptRot13 } from '../encModules/rot13';
 import { decryptVigener } from '../encModules/vigenere';
+import { decryptCeasar } from '../encModules/ceasar';
 
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -33,6 +34,7 @@ const PasswordDecryptor = () => {
     { value: 'vigenere', label: 'Vigenère Cipher', requiresKey: true },
     { value: 'rsa', label: 'RSA', requiresKey: true },
     { value: "Affine", label: "Affine Cipher", requiresKey: true },
+    { value: "Ceasar", label: "Ceasar Cipher", requiresKey: true },
   ];
 
   const handleDecrypt = () => {
@@ -97,6 +99,21 @@ const PasswordDecryptor = () => {
           }
           result = decryptAffine(encryptedPassword, a, b);
           break;
+        }
+      }
+      case 'Ceasar': {
+        const key = parseInt(decryptionKey);
+        if( isNaN(key)){
+          result = 'Invalid key for Ceasar Cipher';
+          break;
+        }
+        try{
+          result = decryptCeasar(encryptedPassword, key);
+          break;
+        }catch(err){
+          result = 'Ceasar decryption failed';
+          console.log(err)
+          break
         }
       }
 
