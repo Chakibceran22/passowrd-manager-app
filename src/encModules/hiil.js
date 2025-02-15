@@ -83,8 +83,4 @@ const decryptHill = (text, key) => {
     return finalResult;
 
 }
-console.log(encryptHill('chakib', matrix([[3,5],[2,7]])));
-console.log(decryptHill('PBYSDX', matrix([[3,5],[2,7]])))
-console.log(invMatrix2Mod26(matrix([[3,5],[2,7]])));
-console.log(invDet(5));
-
+export { encryptHill, decryptHill }
