@@ -16,8 +16,9 @@ import { encryptXor } from '../encModules/xorCypher';
 import { encryptVigener } from '../encModules/vigenere';
 import { encryptCeasar } from '../encModules/ceasar';
 import { encryptHill } from '../encModules/hiil';
-import { reshape, matrix } from 'mathjs';
+import { reshape, matrix, isArray } from 'mathjs';
 import HillMatrixInput from './HillMatrixInput';
+import { encrypRandomShuffle, shuffledAlphabet } from '../encModules/randomShuffle';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -45,7 +46,8 @@ const PasswordEncryptor = () => {
     { value: 'RSA', label: "RSA", requiresKey: true },
     { value: "Affine", label: "Affine Cipher", requiresKey: true },
     { value: "Ceasar", label: "Ceasar Cipher", requiresKey: true },
-    { value: "Hill", label: "Hill Cipher", requiresKey: true }
+    { value: "Hill", label: "Hill Cipher", requiresKey: true },
+    { value: "Random Shuffle", label: "Random Shuffle", requiresKey: false }
   ];
 
   const handleHillMatrixChange = (row, col, value) => {
@@ -138,6 +140,9 @@ const PasswordEncryptor = () => {
             console.log(err)
             break;
           }
+        case 'Random Shuffle':
+          result = encrypRandomShuffle(plainPassword);
+          break;    
 
       default:
         result = 'Invalid encryption method';
@@ -147,8 +152,12 @@ const PasswordEncryptor = () => {
     setEncryptedPassword(result);
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(encryptedPassword);
+  const copyToClipboard = (text) => {
+    if( isArray(text)){
+      navigator.clipboard.writeText(text.join(''));
+      return
+    }
+    navigator.clipboard.writeText(text);
   };
 
   return (
@@ -184,29 +193,26 @@ const PasswordEncryptor = () => {
             )
           )}
 
-          {/* Non-RSA Key Input */}
           {encryptionType !== 'RSA' && encryptionType !== "Affine" && encryptionType !== "Hill" && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
             <KeyInput isDarkMode={isDarkMode} setKey={setEncryptionKey} Key={encryptionKey} notice={"Encryption Key"} />
           )}
-          {/*Affine Key Display */}
           {encryptionType === 'Affine' && (
             <KeyInput isDarkMode={isDarkMode} setKey={setEncryptionKey} Key={encryptionKey} notice={"Enter a and b for the affine cipher seperate by , "} />
           )}
           <Button handleEvent={handleEncrypt} password={plainPassword} word={"Encrypt"} isDarkMode={isDarkMode}></Button>
 
-          {/* RSA Public Key Display */}
           {encryptionType === 'RSA' && generatedPublicKey && (
-            <RsaPublicKeyDisplay isDarkMode={isDarkMode} copyToClipboard={copyToClipboard} generatedPublicKey={generatedPublicKey} generatedPrivaetKey={generatedPrivaetKey} />
+            <RsaPublicKeyDisplay isDarkMode={isDarkMode} copyToClipboard={()=>copyToClipboard(generatedPrivaetKey)} generatedPublicKey={generatedPublicKey} generatedPrivaetKey={generatedPrivaetKey} />
           )}
 
-
-          {/* Encrypted Result */}
+          {encryptionType === 'Random Shuffle' && encryptedPassword && (
+            <Result isDarkMode={isDarkMode} notice={"Shuffled Alphabet"} copyToClipboard={() =>copyToClipboard(shuffledAlphabet)} setShowResult={setShowEncrypted} showText={showEncrypted} text={shuffledAlphabet.join('')} />
+          )}
           {encryptedPassword && (
-            <Result isDarkMode={isDarkMode} notice={"Encrypted Password"} copyToClipboard={copyToClipboard} setShowResult={setShowEncrypted} showText={showEncrypted} text={encryptedPassword} />
+            <Result isDarkMode={isDarkMode} notice={"Encrypted Password"} copyToClipboard={() => copyToClipboard(encryptedPassword)} setShowResult={setShowEncrypted} showText={showEncrypted} text={encryptedPassword} />
           )}
         </div>
 
-        {/* Mode Toggle */}
         <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode}></DarkModeToggle>
       </div>
     </div>
