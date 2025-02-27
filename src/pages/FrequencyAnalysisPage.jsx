@@ -10,6 +10,7 @@ import LanuageSelector from '../componenets/LanguageSelector';
 import AnalysisResult from '../componenets/AnalysisResult';
 import CryptanalysisToolsHeader from '../componenets/CryptanalysisToolsHeader';
 import { freqAnalysis } from '../encModules/analyseFreq';
+import { indexOfCoincidenceCalculator } from '../encModules/indexOfCoincidence';
 
 const FrequencyAnalysisTool = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -90,42 +91,8 @@ const FrequencyAnalysisTool = () => {
 
 
       case 'indexOfCoincidence':
-        // Calculate Index of Coincidence
-        const icLetterCounts = {};
-        let icTotalLetters = 0;
-
-        for (const char of processedText) {
-          if (/[A-Z]/.test(char)) {
-            icLetterCounts[char] = (icLetterCounts[char] || 0) + 1;
-            icTotalLetters++;
-          }
-        }
-
-        let sumFrequencies = 0;
-        for (const letter in icLetterCounts) {
-          const frequency = icLetterCounts[letter];
-          sumFrequencies += frequency * (frequency - 1);
-        }
-
-        const ic = icTotalLetters > 1
-          ? sumFrequencies / (icTotalLetters * (icTotalLetters - 1))
-          : 0;
-
-        // Expected ICs for reference languages
-        const expectedIC = {
-          english: 0.0667,
-          french: 0.0778,
-          german: 0.0762,
-          spanish: 0.0770
-        };
-
-        data = {
-          type: 'indexOfCoincidence',
-          title: 'Index of Coincidence Analysis',
-          value: ic.toFixed(4),
-          expectedValue: expectedIC[referenceLanguage].toFixed(4),
-          language: languageOptions.find(l => l.value === referenceLanguage).label
-        };
+        const [ic, dataReturnIndex, expectedIC] = indexOfCoincidenceCalculator(processedText, referenceLanguage, languageOptions);
+        data = dataReturnIndex
 
         result = `Index of Coincidence: ${ic.toFixed(4)}\n`;
         result += `Expected IC for ${languageOptions.find(l => l.value === referenceLanguage).label}: ${expectedIC[referenceLanguage].toFixed(4)}\n`;
