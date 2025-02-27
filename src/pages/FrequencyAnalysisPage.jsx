@@ -10,6 +10,8 @@ import LanuageSelector from '../componenets/LanguageSelector';
 import AnalysisResult from '../componenets/AnalysisResult';
 import CryptanalysisToolsHeader from '../componenets/CryptanalysisToolsHeader';
 import { freqAnalysis } from '../encModules/analyseFreq';
+import { indexOfCoincidenceCalculator } from '../encModules/indexOfCoincidence';
+import { kasiskiAnalysis } from '../encModules/kasiskiAnalysis';
 
 const FrequencyAnalysisTool = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -26,10 +28,7 @@ const FrequencyAnalysisTool = () => {
 
   const analysisMethods = [
     { value: 'letterFrequency', label: 'Letter Frequency', requiresKey: false },
-    { value: 'bigramFrequency', label: 'Bigram Analysis', requiresKey: false },
     { value: 'indexOfCoincidence', label: 'Index of Coincidence', requiresKey: false },
-    { value: 'chiSquared', label: 'Chi-Squared Test', requiresKey: false },
-    { value: 'repeatingPatterns', label: 'Repeating Patterns', requiresKey: false },
     { value: 'kasiski', label: 'Kasiski Examination', requiresKey: false }
   ];
 
@@ -87,123 +86,17 @@ const FrequencyAnalysisTool = () => {
         });
         break;
 
-
-
       case 'indexOfCoincidence':
-        // Calculate Index of Coincidence
-        const icLetterCounts = {};
-        let icTotalLetters = 0;
-
-        for (const char of processedText) {
-          if (/[A-Z]/.test(char)) {
-            icLetterCounts[char] = (icLetterCounts[char] || 0) + 1;
-            icTotalLetters++;
-          }
-        }
-
-        let sumFrequencies = 0;
-        for (const letter in icLetterCounts) {
-          const frequency = icLetterCounts[letter];
-          sumFrequencies += frequency * (frequency - 1);
-        }
-
-        const ic = icTotalLetters > 1
-          ? sumFrequencies / (icTotalLetters * (icTotalLetters - 1))
-          : 0;
-
-        // Expected ICs for reference languages
-        const expectedIC = {
-          english: 0.0667,
-          french: 0.0778,
-          german: 0.0762,
-          spanish: 0.0770
-        };
-
-        data = {
-          type: 'indexOfCoincidence',
-          title: 'Index of Coincidence Analysis',
-          value: ic.toFixed(4),
-          expectedValue: expectedIC[referenceLanguage].toFixed(4),
-          language: languageOptions.find(l => l.value === referenceLanguage).label
-        };
+        const [ic, dataReturnIndex, expectedIC] = indexOfCoincidenceCalculator(processedText, referenceLanguage, languageOptions);
+        data = dataReturnIndex
 
         result = `Index of Coincidence: ${ic.toFixed(4)}\n`;
         result += `Expected IC for ${languageOptions.find(l => l.value === referenceLanguage).label}: ${expectedIC[referenceLanguage].toFixed(4)}\n`;
         result += `\nThis can indicate the type of cipher used. Values close to 0.07 suggest a monoalphabetic substitution, while values close to 0.04 suggest polyalphabetic substitution.`;
         break;
       case 'kasiski':
-        // Find repeating sequences of at least 3 characters
-        const repeats = {};
-        const minLength = 3; // Minimum sequence length to consider
-
-        for (let length = minLength; length <= 5; length++) { // Consider sequences up to 5 chars
-          for (let i = 0; i <= processedText.length - length; i++) {
-            const sequence = processedText.substring(i, i + length);
-
-            // Find all occurrences of this sequence
-            let positions = [];
-            let pos = processedText.indexOf(sequence);
-            while (pos !== -1) {
-              positions.push(pos);
-              pos = processedText.indexOf(sequence, pos + 1);
-            }
-
-            // Only consider sequences that appear multiple times
-            if (positions.length > 1 && !repeats[sequence]) {
-              repeats[sequence] = positions;
-            }
-          }
-        }
-
-        // Calculate distances between occurrences
-        const distances = [];
-        const sequenceData = [];
-
-        for (const sequence in repeats) {
-          const positions = repeats[sequence];
-          const sequenceDistances = [];
-
-          for (let i = 1; i < positions.length; i++) {
-            const distance = positions[i] - positions[i - 1];
-            sequenceDistances.push(distance);
-            distances.push(distance);
-          }
-
-          sequenceData.push({
-            sequence,
-            positions: positions.join(', '),
-            distances: sequenceDistances.join(', '),
-            length: sequence.length
-          });
-        }
-
-        // Get the GCD (Greatest Common Divisor) of all distances
-        const gcd = (a, b) => b ? gcd(b, a % b) : a;
-
-        const findGCDOfArray = (arr) => {
-          let result = arr[0];
-          for (let i = 1; i < arr.length; i++) {
-            result = gcd(result, arr[i]);
-          }
-          return result;
-        };
-
-        const possibleKeyLengths = distances.length > 0 ? findGCDOfArray(distances) : 0;
-
-        // Sort sequences by length (longer first) then by occurrence count
-        sequenceData.sort((a, b) => {
-          if (b.length !== a.length) return b.length - a.length;
-          return b.positions.split(',').length - a.positions.split(',').length;
-        });
-
-        data = {
-          type: 'kasiski',
-          title: 'Kasiski Examination',
-          sequences: sequenceData,
-          possibleKeyLengths: possibleKeyLengths,
-          headers: ['Sequence', 'Length', 'Positions', 'Distances']
-        };
-
+        const [sequenceData, dataKasiski, possibleKeyLengths]  = kasiskiAnalysis(processedText)
+        data = dataKasiski
         result = `Kasiski Examination:\n\n`;
         result += `Possible key length: ${possibleKeyLengths}\n\n`;
 
@@ -214,7 +107,6 @@ const FrequencyAnalysisTool = () => {
         });
         break;
 
-      // Implement other analysis methods similarly
       default:
         result = `Analysis method ${analysisType} not implemented yet.`;
     }

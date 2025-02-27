@@ -54,4 +54,4 @@ const freqAnalysis = (processedText,languageFrequencies, referenceLanguage, lang
 };
 
 
-export {freqAnalysis};
+export {freqAnalysis,calculateCharFrequency};
