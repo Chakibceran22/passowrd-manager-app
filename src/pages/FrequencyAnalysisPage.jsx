@@ -9,6 +9,7 @@ import KasiskiResult from '../componenets/KasiskiResult';
 import LanuageSelector from '../componenets/LanguageSelector';
 import AnalysisResult from '../componenets/AnalysisResult';
 import CryptanalysisToolsHeader from '../componenets/CryptanalysisToolsHeader';
+import { freqAnalysis } from '../encModules/analyseFreq';
 
 const FrequencyAnalysisTool = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -77,44 +78,9 @@ const FrequencyAnalysisTool = () => {
 
     switch (analysisType) {
       case 'letterFrequency':
-        // Count letter frequencies
-        const letterCounts = {};
-        let totalLetters = 0;
-
-        for (const char of processedText) {
-          if (/[A-Z]/.test(char)) {
-            letterCounts[char] = (letterCounts[char] || 0) + 1;
-            totalLetters++;
-          }
-        }
-
-        // Calculate percentages and prepare data for table
-        const frequencyData = Object.keys(letterCounts).sort().map(letter => {
-          const count = letterCounts[letter];
-          const percentage = (count / totalLetters * 100).toFixed(2);
-          const refPercentage = languageFrequencies[referenceLanguage][letter] || 0;
-          const difference = (percentage - refPercentage).toFixed(2);
-
-          return {
-            letter,
-            count,
-            percentage,
-            refPercentage: refPercentage.toFixed(2),
-            difference
-          };
-        });
-
-        // Sort by frequency (highest first)
-        frequencyData.sort((a, b) => b.count - a.count);
-
-        data = {
-          type: 'letterFrequency',
-          title: 'Letter Frequency Analysis',
-          headers: ['Letter', 'Count', 'Frequency (%)', `${languageOptions.find(l => l.value === referenceLanguage).label} (%)`, 'Difference'],
-          rows: frequencyData,
-          totalItems: totalLetters
-        };
-
+        data = null
+        const [frequencyData, dataReturn] = freqAnalysis(processedText, languageFrequencies, referenceLanguage, languageOptions);
+        data = dataReturn
         result = `Letter Frequency Analysis:\n\n`;
         frequencyData.forEach(item => {
           result += `${item.letter}: ${item.count} (${item.percentage}%)\n`;
@@ -276,7 +242,7 @@ const FrequencyAnalysisTool = () => {
           <IndexOfCoincidenceResult isDarkMode={isDarkMode} analysisData={analysisData} />
         )
       case 'kasiski':
-        return(
+        return (
           <KasiskiResult isDarkMode={isDarkMode} analysisData={analysisData} />
         )
 
