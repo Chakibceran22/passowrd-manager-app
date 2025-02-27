@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  ShieldIcon, KeyIcon } from '../componenets/SecurityIcons'; 
+import { ShieldIcon, KeyIcon } from '../componenets/SecurityIcons';
 import { BeakerIcon } from 'lucide-react';
 import Button from '../componenets/Button';
 import Input from '../componenets/Input';
@@ -7,11 +7,13 @@ import SelectionDropDown from '../componenets/SelectionDropDown';
 import DarkModeToggle from '../componenets/ToggleButton';
 import BackButton from '../componenets/BackButton';
 import Result from '../componenets/Result';
+import LetterFrequencyResult from '../componenets/LetteerFrequencyResult';
 
 const FrequencyAnalysisTool = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [cipherText, setCipherText] = useState('');
   const [analysisResult, setAnalysisResult] = useState('');
+  const [analysisData, setAnalysisData] = useState(null);
   const [analysisType, setAnalysisType] = useState('letterFrequency');
   const [showResult, setShowResult] = useState(false);
   const [referenceLanguage, setReferenceLanguage] = useState('english');
@@ -39,13 +41,13 @@ const FrequencyAnalysisTool = () => {
   // Common letter frequencies for different languages
   const languageFrequencies = {
     english: {
-      'E': 12.02, 'T': 9.10, 'A': 8.12, 'O': 7.68, 'I': 7.31, 'N': 6.95, 'S': 6.28, 
+      'E': 12.02, 'T': 9.10, 'A': 8.12, 'O': 7.68, 'I': 7.31, 'N': 6.95, 'S': 6.28,
       'R': 6.02, 'H': 5.92, 'D': 4.32, 'L': 3.98, 'U': 2.88, 'C': 2.71, 'M': 2.61,
       'F': 2.30, 'Y': 2.11, 'W': 2.09, 'G': 2.03, 'P': 1.82, 'B': 1.49, 'V': 1.11,
       'K': 0.69, 'X': 0.17, 'Q': 0.11, 'J': 0.10, 'Z': 0.07
     },
     french: {
-      'E': 14.72, 'A': 8.11, 'I': 7.58, 'S': 7.94, 'N': 7.10, 'R': 6.54, 'T': 7.00, 
+      'E': 14.72, 'A': 8.11, 'I': 7.58, 'S': 7.94, 'N': 7.10, 'R': 6.54, 'T': 7.00,
       'U': 6.31, 'L': 5.46, 'O': 5.38, 'D': 3.66, 'C': 3.26, 'M': 2.97, 'P': 2.98,
       'É': 1.90, 'V': 1.83, 'H': 0.86, 'G': 1.06, 'F': 1.06, 'B': 0.90, 'Q': 1.36,
       'J': 0.54, 'À': 0.49, 'Z': 0.13, 'X': 0.39, 'K': 0.02, 'W': 0.04, 'Y': 0.31
@@ -64,386 +66,286 @@ const FrequencyAnalysisTool = () => {
     }
   };
 
-  // Calculate letter frequency
-  const analyzeLetterFrequency = (text) => {
-    const cleanText = text.toUpperCase().replace(/[^A-Z]/g, '');
-    const charCount = {};
-    let total = cleanText.length;
-    
-    // Count each letter
-    for (let i = 0; i < cleanText.length; i++) {
-      const char = cleanText[i];
-      if (!charCount[char]) charCount[char] = 0;
-      charCount[char]++;
-    }
-    
-    // Calculate percentages and prepare for display
-    const frequencies = {};
-    for (let char in charCount) {
-      frequencies[char] = (charCount[char] / total * 100).toFixed(2);
-    }
-    
-    // Sort by frequency
-    const sortedChars = Object.keys(frequencies).sort(
-      (a, b) => parseFloat(frequencies[b]) - parseFloat(frequencies[a])
-    );
-    
-    let result = "Letter Frequency Analysis:\n\n";
-    result += "| Letter | Count | % | Expected % |\n";
-    result += "|--------|-------|----|------------|\n";
-    
-    sortedChars.forEach(char => {
-      const expectedFreq = languageFrequencies[referenceLanguage][char] 
-        ? languageFrequencies[referenceLanguage][char].toFixed(2) + "%" 
-        : "-";
-      result += `| ${char} | ${charCount[char]} | ${frequencies[char]}% | ${expectedFreq} |\n`;
-    });
-    
-    // Common English language substitutions based on frequency
-    if (referenceLanguage === 'english' && sortedChars.length > 5) {
-      result += "\nPossible substitutions based on frequency:\n\n";
-      const commonLetters = ['E', 'T', 'A', 'O', 'I', 'N', 'S', 'H', 'R', 'D', 'L', 'U'];
-      
-      for (let i = 0; i < Math.min(8, sortedChars.length); i++) {
-        if (commonLetters[i]) {
-          result += `${sortedChars[i]} might be ${commonLetters[i]}\n`;
-        }
-      }
-    }
-    
-    return result;
-  };
-
-  // Analyze bigrams (two-letter sequences)
-  const analyzeBigrams = (text) => {
-    const cleanText = text.toUpperCase().replace(/[^A-Z]/g, '');
-    const bigramCount = {};
-    let total = 0;
-    
-    // Count bigrams
-    for (let i = 0; i < cleanText.length - 1; i++) {
-      const bigram = cleanText.substring(i, i + 2);
-      if (!bigramCount[bigram]) bigramCount[bigram] = 0;
-      bigramCount[bigram]++;
-      total++;
-    }
-    
-    // Sort by frequency
-    const sortedBigrams = Object.keys(bigramCount).sort(
-      (a, b) => bigramCount[b] - bigramCount[a]
-    );
-    
-    // English common bigrams for reference
-    const commonEnglishBigrams = ['TH', 'HE', 'IN', 'ER', 'AN', 'RE', 'ND', 'ON', 'EN', 
-                                'AT', 'ES', 'OR', 'TE', 'OF', 'ED', 'IS', 'IT', 'AL', 'AR', 'ST'];
-    
-    let result = "Bigram Analysis:\n\n";
-    result += "| Bigram | Count | % | Common in English |\n";
-    result += "|--------|-------|----|-----------------|\n";
-    
-    sortedBigrams.slice(0, 20).forEach(bigram => {
-      const percent = (bigramCount[bigram] / total * 100).toFixed(2);
-      const isCommon = commonEnglishBigrams.includes(bigram) ? "Yes" : "No";
-      result += `| ${bigram} | ${bigramCount[bigram]} | ${percent}% | ${isCommon} |\n`;
-    });
-    
-    return result;
-  };
-
-  // Calculate Index of Coincidence
-  const calculateIC = (text) => {
-    const cleanText = text.toUpperCase().replace(/[^A-Z]/g, '');
-    const counts = {};
-    const length = cleanText.length;
-    
-    // Count character occurrences
-    for (let i = 0; i < length; i++) {
-      const char = cleanText[i];
-      if (!counts[char]) counts[char] = 0;
-      counts[char]++;
-    }
-    
-    // Calculate sum of n(n-1)
-    let sum = 0;
-    for (let char in counts) {
-      const n = counts[char];
-      sum += n * (n - 1);
-    }
-    
-    // Calculate IC: sum / (N(N-1))
-    const ic = sum / (length * (length - 1));
-    
-    // Common IC values for reference
-    const icReference = {
-      'english': 0.067,
-      'french': 0.078,
-      'german': 0.076,
-      'spanish': 0.072,
-      'random': 0.038
-    };
-    
-    let result = "Index of Coincidence Analysis:\n\n";
-    result += `Calculated IC: ${ic.toFixed(4)}\n\n`;
-    result += "Reference IC values:\n";
-    result += "| Language | IC |\n";
-    result += "|----------|----|\n";
-    result += "| English | 0.067 |\n";
-    result += "| French | 0.078 |\n";
-    result += "| German | 0.076 |\n";
-    result += "| Spanish | 0.072 |\n";
-    result += "| Random | 0.038 |\n\n";
-    
-    // Interpretation
-    result += "Interpretation:\n";
-    if (ic > 0.060) {
-      result += "- High IC suggests a monoalphabetic substitution cipher\n";
-      result += "  (Caesar, simple substitution, etc.)\n";
-    } else if (ic < 0.045) {
-      result += "- Low IC suggests a polyalphabetic cipher, transposition cipher,\n";
-      result += "  or homophonic substitution\n";
-    } else {
-      result += "- Medium IC might indicate a polyalphabetic cipher with\n";
-      result += "  a small key (like Vigenère)\n";
-    }
-    
-    return result;
-  };
-
-  // Chi-Squared test for language detection
-  const calculateChiSquared = (text) => {
-    const cleanText = text.toUpperCase().replace(/[^A-Z]/g, '');
-    const observed = {};
-    const length = cleanText.length;
-    
-    // Count observed frequencies
-    for (let i = 0; i < length; i++) {
-      const char = cleanText[i];
-      if (!observed[char]) observed[char] = 0;
-      observed[char]++;
-    }
-    
-    // Calculate chi-squared against each language
-    const results = {};
-    
-    for (let lang in languageFrequencies) {
-      let chiSquared = 0;
-      
-      for (let char in languageFrequencies[lang]) {
-        // Expected count based on reference frequency
-        const expected = length * (languageFrequencies[lang][char] / 100);
-        
-        // Observed count (0 if character not present)
-        const observedCount = observed[char] || 0;
-        
-        // Add to chi-squared sum
-        chiSquared += Math.pow(observedCount - expected, 2) / expected;
-      }
-      
-      results[lang] = chiSquared;
-    }
-    
-    // Sort languages by chi-squared value (lower is better match)
-    const sortedLangs = Object.keys(results).sort(
-      (a, b) => results[a] - results[b]
-    );
-    
-    let result = "Chi-Squared Analysis:\n\n";
-    result += "Lower values indicate better match to the language frequency profile.\n\n";
-    result += "| Language | Chi-Squared Value |\n";
-    result += "|----------|-----------------|\n";
-    
-    sortedLangs.forEach(lang => {
-      result += `| ${lang.charAt(0).toUpperCase() + lang.slice(1)} | ${results[lang].toFixed(2)} |\n`;
-    });
-    
-    result += "\nInterpretation:\n";
-    result += `- Best match: ${sortedLangs[0].charAt(0).toUpperCase() + sortedLangs[0].slice(1)}\n`;
-    result += "- Chi-squared test helps identify the possible plaintext language\n";
-    result += "- Can help narrow down substitution cipher possibilites\n";
-    
-    return result;
-  };
-
-  // Find repeating patterns
-  const findRepeatingPatterns = (text) => {
-    const cleanText = text.toUpperCase();
-    const patterns = {};
-    
-    // Search for patterns from 3 to 7 characters
-    for (let len = 3; len <= 7; len++) {
-      for (let i = 0; i <= cleanText.length - len; i++) {
-        const pattern = cleanText.substr(i, len);
-        if (pattern.match(/[^A-Z]/)) continue; // Skip patterns with non-alphabetic chars
-        
-        if (!patterns[pattern]) {
-          patterns[pattern] = {
-            positions: [],
-            count: 0
-          };
-        }
-        
-        patterns[pattern].positions.push(i);
-        patterns[pattern].count++;
-      }
-    }
-    
-    // Filter to patterns that appear at least twice
-    const repeatingPatterns = {};
-    for (let pattern in patterns) {
-      if (patterns[pattern].count >= 2) {
-        repeatingPatterns[pattern] = patterns[pattern];
-      }
-    }
-    
-    // Calculate spacings between occurrences
-    for (let pattern in repeatingPatterns) {
-      repeatingPatterns[pattern].spacings = [];
-      const positions = repeatingPatterns[pattern].positions;
-      
-      for (let i = 1; i < positions.length; i++) {
-        repeatingPatterns[pattern].spacings.push(positions[i] - positions[i-1]);
-      }
-    }
-    
-    // Sort by pattern length (longest first) and count
-    const sortedPatterns = Object.keys(repeatingPatterns).sort((a, b) => {
-      if (a.length !== b.length) return b.length - a.length;
-      return repeatingPatterns[b].count - repeatingPatterns[a].count;
-    });
-    
-    let result = "Repeating Pattern Analysis:\n\n";
-    
-    if (sortedPatterns.length === 0) {
-      return result + "No repeating patterns found.";
-    }
-    
-    result += "| Pattern | Length | Count | Positions | Spacings |\n";
-    result += "|---------|--------|-------|-----------|----------|\n";
-    
-    // Show top 15 patterns
-    sortedPatterns.slice(0, 15).forEach(pattern => {
-      const info = repeatingPatterns[pattern];
-      result += `| ${pattern} | ${pattern.length} | ${info.count} | ${info.positions.join(',')} | ${info.spacings.join(',')} |\n`;
-    });
-    
-    result += "\nInterpretation:\n";
-    result += "- Repeating patterns can indicate repeated words in the plaintext\n";
-    result += "- Spacings between patterns can help determine key length in Vigenère ciphers\n";
-    result += "- Common factors in spacings often reveal the key length\n";
-    
-    return result;
-  };
-
-  // Perform Kasiski examination
-  const performKasiskiExamination = (text) => {
-    const cleanText = text.toUpperCase().replace(/[^A-Z]/g, '');
-    const repeats = findRepeatingPatterns(cleanText);
-    
-    // Extract spacing values and find their factors
-    const getFactors = (num) => {
-      const factors = [];
-      for (let i = 2; i <= Math.floor(Math.sqrt(num)); i++) {
-        if (num % i === 0) {
-          factors.push(i);
-          if (i !== num / i) {
-            factors.push(num / i);
-          }
-        }
-      }
-      return factors.sort((a, b) => a - b);
-    };
-    
-    // Extract all spacings from the pattern analysis
-    const patternData = repeats.split('\n').filter(line => line.includes('|')).slice(2);
-    
-    const allSpacings = [];
-    const factorFrequency = {};
-    
-    patternData.forEach(line => {
-      const parts = line.split('|');
-      if (parts.length >= 6) {
-        const spacings = parts[5].trim().split(',').map(Number);
-        spacings.forEach(spacing => {
-          if (spacing > 1) {
-            allSpacings.push(spacing);
-            
-            // Get factors of each spacing
-            const factors = getFactors(spacing);
-            factors.forEach(factor => {
-              if (!factorFrequency[factor]) factorFrequency[factor] = 0;
-              factorFrequency[factor]++;
-            });
-          }
-        });
-      }
-    });
-    
-    // Sort factors by frequency
-    const sortedFactors = Object.keys(factorFrequency)
-      .map(Number)
-      .sort((a, b) => {
-        if (factorFrequency[b] !== factorFrequency[a]) {
-          return factorFrequency[b] - factorFrequency[a];
-        }
-        return a - b; // If same frequency, sort by value (ascending)
-      });
-    
-    let result = "Kasiski Examination:\n\n";
-    result += repeats + "\n";
-    
-    // Add key length analysis
-    result += "Probable Key Lengths:\n";
-    result += "| Key Length | Frequency |\n";
-    result += "|------------|----------|\n";
-    
-    sortedFactors.slice(0, 10).forEach(factor => {
-      result += `| ${factor} | ${factorFrequency[factor]} |\n`;
-    });
-    
-    result += "\nConclusion:\n";
-    result += `Most likely key length: ${sortedFactors[0]}\n`;
-    result += "The key length is likely one of the most common factors.";
-    
-    return result;
-  };
-  
   const runAnalysis = () => {
-    if (!cipherText) {
-      setAnalysisResult("Please enter some cipher text to analyze.");
-      return;
-    }
-    
+    if (!cipherText) return;
+
     let result = '';
-    
+    let data = null;
+
+    // Preprocess text - convert to uppercase and remove non-alphabetic characters
+    const processedText = cipherText.toUpperCase().replace(/[^A-Z]/g, '');
+
     switch (analysisType) {
       case 'letterFrequency':
-        result = analyzeLetterFrequency(cipherText);
+        // Count letter frequencies
+        const letterCounts = {};
+        let totalLetters = 0;
+
+        for (const char of processedText) {
+          if (/[A-Z]/.test(char)) {
+            letterCounts[char] = (letterCounts[char] || 0) + 1;
+            totalLetters++;
+          }
+        }
+
+        // Calculate percentages and prepare data for table
+        const frequencyData = Object.keys(letterCounts).sort().map(letter => {
+          const count = letterCounts[letter];
+          const percentage = (count / totalLetters * 100).toFixed(2);
+          const refPercentage = languageFrequencies[referenceLanguage][letter] || 0;
+          const difference = (percentage - refPercentage).toFixed(2);
+
+          return {
+            letter,
+            count,
+            percentage,
+            refPercentage: refPercentage.toFixed(2),
+            difference
+          };
+        });
+
+        // Sort by frequency (highest first)
+        frequencyData.sort((a, b) => b.count - a.count);
+
+        data = {
+          type: 'letterFrequency',
+          title: 'Letter Frequency Analysis',
+          headers: ['Letter', 'Count', 'Frequency (%)', `${languageOptions.find(l => l.value === referenceLanguage).label} (%)`, 'Difference'],
+          rows: frequencyData,
+          totalItems: totalLetters
+        };
+
+        result = `Letter Frequency Analysis:\n\n`;
+        frequencyData.forEach(item => {
+          result += `${item.letter}: ${item.count} (${item.percentage}%)\n`;
+        });
         break;
-      case 'bigramFrequency':
-        result = analyzeBigrams(cipherText);
-        break;
+
+      
+
       case 'indexOfCoincidence':
-        result = calculateIC(cipherText);
-        break;
-      case 'chiSquared':
-        result = calculateChiSquared(cipherText);
-        break;
-      case 'repeatingPatterns':
-        result = findRepeatingPatterns(cipherText);
+        // Calculate Index of Coincidence
+        const icLetterCounts = {};
+        let icTotalLetters = 0;
+
+        for (const char of processedText) {
+          if (/[A-Z]/.test(char)) {
+            icLetterCounts[char] = (icLetterCounts[char] || 0) + 1;
+            icTotalLetters++;
+          }
+        }
+
+        let sumFrequencies = 0;
+        for (const letter in icLetterCounts) {
+          const frequency = icLetterCounts[letter];
+          sumFrequencies += frequency * (frequency - 1);
+        }
+
+        const ic = icTotalLetters > 1
+          ? sumFrequencies / (icTotalLetters * (icTotalLetters - 1))
+          : 0;
+
+        // Expected ICs for reference languages
+        const expectedIC = {
+          english: 0.0667,
+          french: 0.0778,
+          german: 0.0762,
+          spanish: 0.0770
+        };
+
+        data = {
+          type: 'indexOfCoincidence',
+          title: 'Index of Coincidence Analysis',
+          value: ic.toFixed(4),
+          expectedValue: expectedIC[referenceLanguage].toFixed(4),
+          language: languageOptions.find(l => l.value === referenceLanguage).label
+        };
+
+        result = `Index of Coincidence: ${ic.toFixed(4)}\n`;
+        result += `Expected IC for ${languageOptions.find(l => l.value === referenceLanguage).label}: ${expectedIC[referenceLanguage].toFixed(4)}\n`;
+        result += `\nThis can indicate the type of cipher used. Values close to 0.07 suggest a monoalphabetic substitution, while values close to 0.04 suggest polyalphabetic substitution.`;
         break;
       case 'kasiski':
-        result = performKasiskiExamination(cipherText);
+        // Find repeating sequences of at least 3 characters
+        const repeats = {};
+        const minLength = 3; // Minimum sequence length to consider
+
+        for (let length = minLength; length <= 5; length++) { // Consider sequences up to 5 chars
+          for (let i = 0; i <= processedText.length - length; i++) {
+            const sequence = processedText.substring(i, i + length);
+
+            // Find all occurrences of this sequence
+            let positions = [];
+            let pos = processedText.indexOf(sequence);
+            while (pos !== -1) {
+              positions.push(pos);
+              pos = processedText.indexOf(sequence, pos + 1);
+            }
+
+            // Only consider sequences that appear multiple times
+            if (positions.length > 1 && !repeats[sequence]) {
+              repeats[sequence] = positions;
+            }
+          }
+        }
+
+        // Calculate distances between occurrences
+        const distances = [];
+        const sequenceData = [];
+
+        for (const sequence in repeats) {
+          const positions = repeats[sequence];
+          const sequenceDistances = [];
+
+          for (let i = 1; i < positions.length; i++) {
+            const distance = positions[i] - positions[i - 1];
+            sequenceDistances.push(distance);
+            distances.push(distance);
+          }
+
+          sequenceData.push({
+            sequence,
+            positions: positions.join(', '),
+            distances: sequenceDistances.join(', '),
+            length: sequence.length
+          });
+        }
+
+        // Get the GCD (Greatest Common Divisor) of all distances
+        const gcd = (a, b) => b ? gcd(b, a % b) : a;
+
+        const findGCDOfArray = (arr) => {
+          let result = arr[0];
+          for (let i = 1; i < arr.length; i++) {
+            result = gcd(result, arr[i]);
+          }
+          return result;
+        };
+
+        const possibleKeyLengths = distances.length > 0 ? findGCDOfArray(distances) : 0;
+
+        // Sort sequences by length (longer first) then by occurrence count
+        sequenceData.sort((a, b) => {
+          if (b.length !== a.length) return b.length - a.length;
+          return b.positions.split(',').length - a.positions.split(',').length;
+        });
+
+        data = {
+          type: 'kasiski',
+          title: 'Kasiski Examination',
+          sequences: sequenceData,
+          possibleKeyLengths: possibleKeyLengths,
+          headers: ['Sequence', 'Length', 'Positions', 'Distances']
+        };
+
+        result = `Kasiski Examination:\n\n`;
+        result += `Possible key length: ${possibleKeyLengths}\n\n`;
+
+        sequenceData.forEach(item => {
+          result += `Sequence: ${item.sequence} (Length: ${item.length})\n`;
+          result += `Positions: ${item.positions}\n`;
+          result += `Distances: ${item.distances}\n\n`;
+        });
         break;
+
+      // Implement other analysis methods similarly
       default:
-        result = "Invalid analysis method selected.";
+        result = `Analysis method ${analysisType} not implemented yet.`;
     }
-    
+
     setAnalysisResult(result);
+    setAnalysisData(data);
     setShowResult(true);
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(analysisResult);
+  };
+
+  // Render different result tables based on analysis type
+  const renderResultTable = () => {
+    if (!analysisData) return null;
+
+    switch (analysisData.type) {
+      case 'letterFrequency':
+        return(
+          <LetterFrequencyResult isDarkMode={isDarkMode} analysisData={analysisData} />
+        )
+      case 'indexOfCoincidence':
+        return (
+          <div className={`p-4 rounded-lg border transform transition-all duration-300 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+            }`}>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <div className="text-sm font-medium">Text IC</div>
+                <div className="text-2xl font-bold">{analysisData.value}</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-sm font-medium">{analysisData.language} Expected</div>
+                <div className="text-2xl font-bold">{analysisData.expectedValue}</div>
+              </div>
+            </div>
+
+            <div className={`mt-4 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <p>Values near {analysisData.expectedValue} suggest a monoalphabetic cipher.</p>
+              <p>Values near 0.04 suggest a polyalphabetic cipher.</p>
+            </div>
+          </div>
+        );
+        case 'kasiski':
+  return (
+    <div className={`rounded-lg border transform transition-all duration-300 ${
+      isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+    }`}>
+      <div className={`p-4 mb-2 border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+        <div className="text-sm font-medium">Likely Key Length</div>
+        <div className="text-2xl font-bold">{analysisData.possibleKeyLengths || 'Unknown'}</div>
+        <div className={`mt-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+          Based on the greatest common divisor of the distances between repeating sequences
+        </div>
+      </div>
+      
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className={`border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+              {analysisData.headers.map((header, index) => (
+                <th key={index} className="px-3 py-2 text-left text-sm font-medium">
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {analysisData.sequences.map((row, rowIndex) => (
+              <tr key={rowIndex} className={`${rowIndex % 2 === 0 
+                ? (isDarkMode ? 'bg-gray-700' : 'bg-gray-50') 
+                : ''}`}>
+                <td className="px-3 py-2 text-sm font-mono">{row.sequence}</td>
+                <td className="px-3 py-2 text-sm">{row.length}</td>
+                <td className="px-3 py-2 text-sm">{row.positions}</td>
+                <td className="px-3 py-2 text-sm">{row.distances}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
+      <div className={`p-3 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+        <p>The Kasiski examination looks for repeating sequences in the ciphertext.</p>
+        <p>The distances between repetitions can reveal the key length in polyalphabetic ciphers like Vigenère.</p>
+      </div>
+    </div>
+  );
+
+      default:
+        return (
+          <div className={`p-4 rounded-lg border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-300' : 'bg-white border-gray-300 text-gray-600'
+            }`}>
+            <pre className="whitespace-pre-wrap text-sm">{analysisResult}</pre>
+          </div>
+        );
+    }
   };
 
   return (
@@ -458,32 +360,30 @@ const FrequencyAnalysisTool = () => {
         </div>
 
         <div className="space-y-4">
-          <Input 
-            placeholder="Enter cipher text to analyze..." 
-            password={cipherText} 
-            isDarkMode={isDarkMode} 
-            setPassword={setCipherText} 
+          <Input
+            placeholder="Enter cipher text to analyze..."
+            password={cipherText}
+            isDarkMode={isDarkMode}
+            setPassword={setCipherText}
           />
-          
-          <SelectionDropDown 
+
+          <SelectionDropDown
             encryptionType={analysisType}
             encryptionMethods={analysisMethods}
             isDarkMode={isDarkMode}
             setEncryptionType={setAnalysisType}
             notice="Analysis Method"
           />
-          
+
           {/* Reference language selector */}
-          <div className={`p-3 rounded-lg border-2 transform transition-all duration-300 ${
-            isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
-          }`}>
+          <div className={`p-3 rounded-lg border-2 transform transition-all duration-300 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
+            }`}>
             <label className="block text-sm font-medium mb-2">Reference Language</label>
             <select
               value={referenceLanguage}
               onChange={(e) => setReferenceLanguage(e.target.value)}
-              className={`w-full p-2 rounded transform transition-all duration-300 ${
-                isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-100 text-black'
-              }`}
+              className={`w-full p-2 rounded transform transition-all duration-300 ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-100 text-black'
+                }`}
             >
               {languageOptions.map(option => (
                 <option key={option.value} value={option.value}>
@@ -492,24 +392,33 @@ const FrequencyAnalysisTool = () => {
               ))}
             </select>
           </div>
-          
-          <Button 
-            handleEvent={runAnalysis} 
-            password={cipherText} 
-            word="Analyze" 
+
+          <Button
+            handleEvent={runAnalysis}
+            password={cipherText}
+            word="Analyze"
             isDarkMode={isDarkMode}
           />
-          
+
           {/* Analysis Results */}
-          {analysisResult && (
-            <Result 
-              isDarkMode={isDarkMode} 
-              notice="Analysis Results" 
-              copyToClipboard={copyToClipboard} 
-              setShowResult={setShowResult} 
-              showText={showResult} 
-              text={analysisResult} 
-            />
+          {analysisData && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-medium">{analysisData.title}</h2>
+                <button
+                  onClick={copyToClipboard}
+                  className={`p-1 rounded transform transition-all duration-300 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
+                    }`}
+                  title="Copy results"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              </div>
+
+              {renderResultTable()}
+            </div>
           )}
         </div>
 
