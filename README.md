@@ -110,7 +110,7 @@ Detailed documentation for each cipher implementation and analysis tool can be f
 While this application implements various encryption algorithms, some (like Caesar Cipher) are for educational purposes and should not be used for securing sensitive data in production environments. The analysis tools provided are meant for educational purposes and cryptanalysis learning.
 
 ## 📞 Contact
-Your Name - [Email](grabahchakib008@gmail.com)
+Email - grabachakib008@gmail.com <br>
 Project Link: [https://github.com/Chakibceran22/passowrd-manager-app](https://github.com/Chakibceran22/passowrd-manager-app)
 
 ## ✨ Acknowledgments
