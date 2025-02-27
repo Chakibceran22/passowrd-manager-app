@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldIcon, KeyIcon } from '../componenets/SecurityIcons';
-import { BeakerIcon } from 'lucide-react';
 import Button from '../componenets/Button';
 import Input from '../componenets/Input';
 import SelectionDropDown from '../componenets/SelectionDropDown';
 import DarkModeToggle from '../componenets/ToggleButton';
-import BackButton from '../componenets/BackButton';
 import LetterFrequencyResult from '../componenets/LetteerFrequencyResult';
 import IndexOfCoincidenceResult from '../componenets/IndexOfCoincidenceResult';
 import KasiskiResult from '../componenets/KasiskiResult';
+import LanuageSelector from '../componenets/LanguageSelector';
+import AnalysisResult from '../componenets/AnalysisResult';
+import CryptanalysisToolsHeader from '../componenets/CryptanalysisToolsHeader';
 
 const FrequencyAnalysisTool = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -295,11 +295,7 @@ const FrequencyAnalysisTool = () => {
       <div className={`w-full max-w-md p-8 rounded-xl shadow-2xl border-2 transform transition-all duration-300 ${isDarkMode
         ? 'bg-gray-800 border-gray-700'
         : 'bg-white border-gray-200'}`}>
-        <div className="flex items-center mb-6">
-          <BeakerIcon className={`mr-4 w-12 h-12 transform transition-all duration-300 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
-          <h1 className="text-3xl font-bold">Cryptanalysis Tool</h1>
-          <BackButton isDarkMode={isDarkMode} />
-        </div>
+        <CryptanalysisToolsHeader isDarkMode={isDarkMode} />
 
         <div className="space-y-4">
           <Input
@@ -308,7 +304,6 @@ const FrequencyAnalysisTool = () => {
             isDarkMode={isDarkMode}
             setPassword={setCipherText}
           />
-
           <SelectionDropDown
             encryptionType={analysisType}
             encryptionMethods={analysisMethods}
@@ -317,23 +312,7 @@ const FrequencyAnalysisTool = () => {
             notice="Analysis Method"
           />
 
-          {/* Reference language selector */}
-          <div className={`p-3 rounded-lg border-2 transform transition-all duration-300 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
-            }`}>
-            <label className="block text-sm font-medium mb-2">Reference Language</label>
-            <select
-              value={referenceLanguage}
-              onChange={(e) => setReferenceLanguage(e.target.value)}
-              className={`w-full p-2 rounded transform transition-all duration-300 ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-100 text-black'
-                }`}
-            >
-              {languageOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <LanuageSelector isDarkMode={isDarkMode} referenceLanguage={referenceLanguage} languageOptions={languageOptions} setReferenceLanguage={setReferenceLanguage} />
 
           <Button
             handleEvent={runAnalysis}
@@ -342,29 +321,9 @@ const FrequencyAnalysisTool = () => {
             isDarkMode={isDarkMode}
           />
 
-          {/* Analysis Results */}
-          {analysisData && (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-medium">{analysisData.title}</h2>
-                <button
-                  onClick={copyToClipboard}
-                  className={`p-1 rounded transform transition-all duration-300 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'
-                    }`}
-                  title="Copy results"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                  </svg>
-                </button>
-              </div>
-
-              {renderResultTable()}
-            </div>
-          )}
+          <AnalysisResult analysisData={analysisData} copyToClipboard={copyToClipboard} isDarkMode={isDarkMode} renderResultTable={renderResultTable} />
         </div>
 
-        {/* Mode Toggle */}
         <DarkModeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       </div>
     </div>
