@@ -9,9 +9,9 @@ import KasiskiResult from '../componenets/KasiskiResult';
 import LanuageSelector from '../componenets/LanguageSelector';
 import AnalysisResult from '../componenets/AnalysisResult';
 import CryptanalysisToolsHeader from '../componenets/CryptanalysisToolsHeader';
-import { freqAnalysis } from '../encModules/analyseFreq';
-import { indexOfCoincidenceCalculator } from '../encModules/indexOfCoincidence';
-import { kasiskiAnalysis } from '../encModules/kasiskiAnalysis';
+import { freqAnalysis } from '../analysisTools/analyseFreq';
+import { indexOfCoincidenceCalculator } from '../analysisTools/indexOfCoincidence';
+import { kasiskiAnalysis } from '../analysisTools/kasiskiAnalysis';
 
 const FrequencyAnalysisTool = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
