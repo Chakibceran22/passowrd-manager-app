@@ -8,7 +8,7 @@ const Header = ({ isDarkMode, setIsDarkMode }) => {
                 <div className="flex items-center space-x-4 transform transition-all duration-300">
                   <ShieldIcon className={`w-10 h-10 transform transition-all duration-300 ${isDarkMode ? 'text-green-400' : 'text-green-600'
                     }`} />
-                  <h1 className="text-3xl font-bold">SecureTools</h1>
+                  <h1 className="text-3xl font-bold"></h1>
                 </div>
                 <button
                   onClick={() => setIsDarkMode(!isDarkMode)}
