@@ -1,6 +1,6 @@
 
 import './App.css'
-import PasswordHasher from './componenets/PasswordHahsing'
+import PasswordHasher from './pages/PasswordHahsing'
 import PasswordDecryptor from './pages/PasswordDecryption'
 import PasswordEncryptor from './pages/passwordEncryptionPage'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
