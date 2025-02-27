@@ -61,6 +61,14 @@ const SecurityLandingPage = () => {
             description="Transform your passwords using multiple hashing methods. Add salt for extra security."
             route="/hash"
           />
+          <FeatureCard
+            icon={ShieldIcon}
+            isDarkMode={isDarkMode}
+            navigate={navigate}
+            title="Frequency Analysis"
+            description="Analyze the frequency of characters in a given text. Useful for decryption."
+            route="/frequency"
+            />
 
         </div>
 

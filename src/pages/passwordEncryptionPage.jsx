@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { ShieldIcon } from './SecurityIcons';
+import { ShieldIcon } from '../componenets/SecurityIcons'; 
 import { calculatePublicKey, calculatePrivateKey, encryptMessage, decryptMessage, n, totient } from '../encModules/rsa';
 import { encryptAffine } from '../encModules/affine';
 import { useEffect } from 'react';
-import Button from './Button';
-import SelectionDropDown from './SelectionDropDown';
-import RsaPublicKeyDisplay from './RsaPublicKeyDisplay';
-import DarkModeToggle from './ToggleButton';
-import KeyInput from './KeyInput';
-import BackButton from './BackButton';
-import PasswordInput from './PasswordInput';
-import Result from './Result';
+import Button from '../componenets/Button';
+import SelectionDropDown from '../componenets/SelectionDropDown';
+import RsaPublicKeyDisplay from '../componenets/RsaPublicKeyDisplay';
+import DarkModeToggle from '../componenets/ToggleButton';
+import KeyInput from '../componenets/KeyInput';
+import BackButton from '../componenets/BackButton';
+import PasswordInput from '../componenets/PasswordInput';
+import Result from '../componenets/Result';
 import { encryptRot13 } from '../encModules/rot13';
 import { encryptXor } from '../encModules/xorCypher';
 import { encryptVigener } from '../encModules/vigenere';
 import { encryptCeasar } from '../encModules/ceasar';
 import { encryptHill } from '../encModules/hiil';
 import { reshape, matrix, isArray } from 'mathjs';
-import HillMatrixInput from './HillMatrixInput';
+import HillMatrixInput from '../componenets/HillMatrixInput';
 import { encrypRandomShuffle, shuffledAlphabet } from '../encModules/randomShuffle';
 
 const PasswordEncryptor = () => {

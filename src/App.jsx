@@ -3,11 +3,12 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import PasswordHasher from './componenets/PasswordHahsing'
-import PasswordDecryptor from './componenets/PasswordDecryption'
+import PasswordDecryptor from './pages/PasswordDecryption'
+import PasswordEncryptor from './pages/passwordEncryptionPage'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import SecurityLandingPage from './componenets/LandingPage'
-import PasswordEncryptor from './componenets/passwordEncryptionPage'
 import NotFound from './componenets/NotFoundPage'
+import CryptanalysisTools from './pages/FrequencyAnalysisPage'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -20,6 +21,7 @@ function App() {
         <Route path='/hash' element={<PasswordHasher/>}></Route>
         <Route path='/decrypt' element={<PasswordDecryptor/>}></Route>
         <Route path='/encrypt' element={<PasswordEncryptor/>}></Route>
+        <Route path='/frequency' element={<CryptanalysisTools/>}/>
         <Route path='*' element={<NotFound/>}></Route>
       </Routes>
     </Router>
