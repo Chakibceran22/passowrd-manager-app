@@ -6,8 +6,9 @@ import Input from '../componenets/Input';
 import SelectionDropDown from '../componenets/SelectionDropDown';
 import DarkModeToggle from '../componenets/ToggleButton';
 import BackButton from '../componenets/BackButton';
-import Result from '../componenets/Result';
 import LetterFrequencyResult from '../componenets/LetteerFrequencyResult';
+import IndexOfCoincidenceResult from '../componenets/IndexOfCoincidenceResult';
+import KasiskiResult from '../componenets/KasiskiResult';
 
 const FrequencyAnalysisTool = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -38,7 +39,6 @@ const FrequencyAnalysisTool = () => {
     { value: 'spanish', label: 'Spanish' }
   ];
 
-  // Common letter frequencies for different languages
   const languageFrequencies = {
     english: {
       'E': 12.02, 'T': 9.10, 'A': 8.12, 'O': 7.68, 'I': 7.31, 'N': 6.95, 'S': 6.28,
@@ -121,7 +121,7 @@ const FrequencyAnalysisTool = () => {
         });
         break;
 
-      
+
 
       case 'indexOfCoincidence':
         // Calculate Index of Coincidence
@@ -268,75 +268,17 @@ const FrequencyAnalysisTool = () => {
 
     switch (analysisData.type) {
       case 'letterFrequency':
-        return(
+        return (
           <LetterFrequencyResult isDarkMode={isDarkMode} analysisData={analysisData} />
         )
       case 'indexOfCoincidence':
         return (
-          <div className={`p-4 rounded-lg border transform transition-all duration-300 ${isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
-            }`}>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <div className="text-sm font-medium">Text IC</div>
-                <div className="text-2xl font-bold">{analysisData.value}</div>
-              </div>
-              <div className="space-y-1">
-                <div className="text-sm font-medium">{analysisData.language} Expected</div>
-                <div className="text-2xl font-bold">{analysisData.expectedValue}</div>
-              </div>
-            </div>
-
-            <div className={`mt-4 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              <p>Values near {analysisData.expectedValue} suggest a monoalphabetic cipher.</p>
-              <p>Values near 0.04 suggest a polyalphabetic cipher.</p>
-            </div>
-          </div>
-        );
-        case 'kasiski':
-  return (
-    <div className={`rounded-lg border transform transition-all duration-300 ${
-      isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'
-    }`}>
-      <div className={`p-4 mb-2 border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
-        <div className="text-sm font-medium">Likely Key Length</div>
-        <div className="text-2xl font-bold">{analysisData.possibleKeyLengths || 'Unknown'}</div>
-        <div className={`mt-2 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-          Based on the greatest common divisor of the distances between repeating sequences
-        </div>
-      </div>
-      
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className={`border-b ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`}>
-              {analysisData.headers.map((header, index) => (
-                <th key={index} className="px-3 py-2 text-left text-sm font-medium">
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {analysisData.sequences.map((row, rowIndex) => (
-              <tr key={rowIndex} className={`${rowIndex % 2 === 0 
-                ? (isDarkMode ? 'bg-gray-700' : 'bg-gray-50') 
-                : ''}`}>
-                <td className="px-3 py-2 text-sm font-mono">{row.sequence}</td>
-                <td className="px-3 py-2 text-sm">{row.length}</td>
-                <td className="px-3 py-2 text-sm">{row.positions}</td>
-                <td className="px-3 py-2 text-sm">{row.distances}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      
-      <div className={`p-3 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-        <p>The Kasiski examination looks for repeating sequences in the ciphertext.</p>
-        <p>The distances between repetitions can reveal the key length in polyalphabetic ciphers like Vigenère.</p>
-      </div>
-    </div>
-  );
+          <IndexOfCoincidenceResult isDarkMode={isDarkMode} analysisData={analysisData} />
+        )
+      case 'kasiski':
+        return(
+          <KasiskiResult isDarkMode={isDarkMode} analysisData={analysisData} />
+        )
 
       default:
         return (
