@@ -3,7 +3,7 @@ let data = null
 
 const calculateCharFrequency = (processedText ) => {
   const  letterCounts = {}
-  let totalLetters = 0
+  let totalLetters = 0;
   for (const char of processedText) {
     if (/[A-Z]/.test(char)) {
       letterCounts[char] = (letterCounts[char] || 0) + 1;
