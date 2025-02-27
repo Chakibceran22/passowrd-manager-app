@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShieldIcon, LockIcon, KeyIcon } from './SecurityIcons';
-import FeatureCard from './FeatureCard';
-import Footer from './Footer';
-import Header from './Header';
-import SecurityWarning from './SecurityWarning';
+import { ShieldIcon, LockIcon, KeyIcon } from '../componenets/SecurityIcons';
+import FeatureCard from '../componenets/FeatureCard';
+import Footer from '../componenets/Footer';
+import Header from '../componenets/Header';
+import SecurityWarning from '../componenets/SecurityWarning';
 const SecurityLandingPage = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const navigate = useNavigate();

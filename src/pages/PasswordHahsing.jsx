@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldIcon, KeyIcon, LockIcon, EyeIcon, EyeOffIcon } from './SecurityIcons';
-import DarkModeToggle from './ToggleButton';
-import Button from './Button';
-import SaltInput from './SaltInput';
-import PasswordInput from './PasswordInput';
-import BackButton from './BackButton';
+import { ShieldIcon, KeyIcon, LockIcon, EyeIcon, EyeOffIcon } from '../componenets/SecurityIcons';
+import DarkModeToggle from '../componenets/ToggleButton';
+import Button from '../componenets/Button';
+import SaltInput from '../componenets/SaltInput';
+import PasswordInput from '../componenets/PasswordInput';
+import BackButton from '../componenets/BackButton';
 const PasswordHasher = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [password, setPassword] = useState('');
