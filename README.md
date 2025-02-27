@@ -1,6 +1,5 @@
 # Encryption & Decryption Application
-
-A robust encryption and decryption application implementing multiple classical and modern cryptographic algorithms.
+A robust encryption and decryption application implementing multiple classical and modern cryptographic algorithms with advanced cryptanalysis tools.
 
 ## 🔐 Features
 
@@ -13,6 +12,11 @@ A robust encryption and decryption application implementing multiple classical a
 - **XOR Cipher**: Bitwise operation-based encryption
 - **RSA**: Public-key cryptography implementation
 
+### Cryptanalysis Tools
+- **Letter Frequency Analysis**: Statistical tool to analyze character distribution in ciphertext
+- **Kasiski Examination**: Technique for finding the key length in polyalphabetic substitution ciphers
+- **Index of Coincidence**: Mathematical tool to measure the unevenness of letter distribution in a text
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -24,12 +28,10 @@ A robust encryption and decryption application implementing multiple classical a
 ```bash
 git clone https://github.com/Chakibceran22/passowrd-manager-app.git
 ```
-
 2. Navigate to the project directory:
 ```bash
 cd passowrd-manager-app
 ```
-
 3. Install dependencies:
 ```bash
 npm install  # or your specific install command
@@ -43,6 +45,27 @@ You can modify the RSA keys in the `encModules` file located in the frontend dir
 ### Cipher Implementations
 All cipher implementations can be found and tested in the `encModules` folder. Each cipher has its own dedicated file for easy maintenance and testing.
 
+### Using Analysis Tools
+The cryptanalysis tools are available in the `analysisTools` directory:
+
+- **Letter Frequency Analysis**: Helps break simple substitution ciphers by comparing character frequencies with known language patterns
+```javascript
+import { letterFrequencyAnalyzer } from './analysisTools/letterFrequency';
+const analysis = letterFrequencyAnalyzer(ciphertext);
+```
+
+- **Kasiski Examination**: Identifies repeated sequences in ciphertext to determine potential key lengths
+```javascript
+import { kaskiskiExamination } from './analysisTools/kasiski';
+const potentialKeyLengths = kaskiskiExamination(ciphertext);
+```
+
+- **Index of Coincidence**: Measures randomness in text to distinguish between monoalphabetic and polyalphabetic ciphers
+```javascript
+import { calculateIC } from './analysisTools/indexOfCoincidence';
+const ic = calculateIC(ciphertext);
+```
+
 ## 🗺️ Roadmap
 
 ### Future Features
@@ -50,11 +73,11 @@ All cipher implementations can be found and tested in the `encModules` folder. E
 - [ ] SHA-256 Implementation
 - [ ] Bcrypt Integration
 - [ ] Additional Hash Functions
+- [ ] Automated Cryptanalysis for Common Ciphers
+- [ ] Machine Learning-Based Cipher Detection
 
 ## 🤝 Contributing
-
 We welcome contributions! Here's how you can help:
-
 1. Fork the repository
 2. Create your feature branch:
 ```bash
@@ -76,33 +99,21 @@ git push origin feature/AmazingFeature
 - Add tests for new features
 - Update documentation as needed
 
-## 📄 License
 
-[Your License Here] - See the LICENSE file for details
 
-## 🔍 Testing
 
-Each cipher implementation includes its own test suite. To run tests:
-```bash
-npm test  # or your specific test command
-```
 
 ## 📚 Documentation
-
-Detailed documentation for each cipher implementation can be found in their respective files within the `encModules` directory.
+Detailed documentation for each cipher implementation and analysis tool can be found in their respective files within the `encModules` and `analysisTools` directories.
 
 ## ⚠️ Security Notice
-
-While this application implements various encryption algorithms, some (like Caesar Cipher) are for educational purposes and should not be used for securing sensitive data in production environments.
+While this application implements various encryption algorithms, some (like Caesar Cipher) are for educational purposes and should not be used for securing sensitive data in production environments. The analysis tools provided are meant for educational purposes and cryptanalysis learning.
 
 ## 📞 Contact
-
-Your Name - [@YourTwitter](https://twitter.com/YourTwitter)
-
+Email - grabachakib008@gmail.com <br>
 Project Link: [https://github.com/Chakibceran22/passowrd-manager-app](https://github.com/Chakibceran22/passowrd-manager-app)
 
 ## ✨ Acknowledgments
-
 - List any acknowledgments here
 - Credit any resources or inspirations
 - Thank contributors
