@@ -5,7 +5,6 @@ const encryptCeasar = (text, shift) => {
         if( char.match(/[a-z]/i)){
             const base = char <= 'Z' ? 65 : 97;
             return String.fromCharCode(mod(char.charCodeAt(0) - base + shift, 26) + base);
-
         }
         return char;
     })

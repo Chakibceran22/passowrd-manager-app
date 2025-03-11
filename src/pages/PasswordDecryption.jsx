@@ -143,11 +143,20 @@ const PasswordDecryptor = () => {
         }
         
       }
-      case 'Random Shuffle':
-        result = decryptionRandomShuffle(encryptedPassword);
-        break;
-
-
+      case 'Random Shuffle': {
+        if (!decryptionKey) {
+          result = 'Random shuffle table required';
+        } else {
+          try {
+            const shuffledAlphabetArray = decryptionKey.split('');
+            result = decryptionRandomShuffle(encryptedPassword, shuffledAlphabetArray);
+          } catch (err) {
+            result = 'Random shuffle decryption failed';
+            console.log(err);
+          }
+        }
+        break; 
+      }
       default:
         result = 'Invalid decryption method';
     }
