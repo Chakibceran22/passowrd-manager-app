@@ -18,6 +18,9 @@ import { decryptHill } from '../encModules/hiil';
 import { matrix, reshape } from 'mathjs';
 import HillMatrixInput from '../componenets/HillMatrixInput';
 import { decryptionRandomShuffle } from '../encModules/randomShuffle';
+import { decryptPlayfair } from '../encModules/playfair';
+
+
 const PasswordDecryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [encryptedPassword, setEncryptedPassword] = useState('');
@@ -43,7 +46,8 @@ const PasswordDecryptor = () => {
     { value: "Affine", label: "Affine Cipher", requiresKey: true },
     { value: "Ceasar", label: "Ceasar Cipher", requiresKey: true },
     { value: "Hill", label: "Hill Cipher", requiresKey: true },
-    { value: "Random Shuffle", label: "Random Shuffle", requiresKey: true }
+    { value: "Random Shuffle", label: "Random Shuffle", requiresKey: true },
+    { value: "Playfair", label: "Playfair Cipher", requiresKey: true },
   ];
   const handleHillMatrixChange = (row, col, value) => {
     const newMatrix = [...hillMatrix];
@@ -156,6 +160,19 @@ const PasswordDecryptor = () => {
           }
         }
         break; 
+      }
+      case 'Playfair': {
+        if (!decryptionKey) {
+            result = 'Key required for Playfair Cipher';
+        } else {
+          try {
+            result = decryptPlayfair(encryptedPassword, decryptionKey);
+          } catch (err) {
+            result = 'Playfair decryption failed';
+            console.log(err);
+          }
+        }
+        break;
       }
       default:
         result = 'Invalid decryption method';
