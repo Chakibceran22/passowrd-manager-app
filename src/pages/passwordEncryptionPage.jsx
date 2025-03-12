@@ -19,6 +19,7 @@ import { encryptHill } from '../encModules/hiil';
 import { reshape, matrix, isArray } from 'mathjs';
 import HillMatrixInput from '../componenets/HillMatrixInput';
 import { encrypRandomShuffle, shuffledAlphabet } from '../encModules/randomShuffle';
+import { encryptPlayfair } from '../encModules/playfair';
 
 const PasswordEncryptor = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -47,7 +48,8 @@ const PasswordEncryptor = () => {
     { value: "Affine", label: "Affine Cipher", requiresKey: true },
     { value: "Ceasar", label: "Ceasar Cipher", requiresKey: true },
     { value: "Hill", label: "Hill Cipher", requiresKey: true },
-    { value: "Random Shuffle", label: "Random Shuffle", requiresKey: false }
+    { value: "Random Shuffle", label: "Random Shuffle", requiresKey: false },
+    { value: "Playfair", label: "Playfair Cipher", requiresKey: true },
   ];
 
   const handleHillMatrixChange = (row, col, value) => {
@@ -131,10 +133,9 @@ const PasswordEncryptor = () => {
         }
         case 'Hill':
           try{
-            
             const hillKey = matrix(reshape(hillMatrix.map(row => row.map(cell => parseInt(cell))),[2,2]));
             result = encryptHill(plainPassword, hillKey, '#');
-            break
+            break;
           }catch(err){
             result = 'Invalid Hill Key';
             console.log(err)
@@ -142,7 +143,20 @@ const PasswordEncryptor = () => {
           }
         case 'Random Shuffle':
           result = encrypRandomShuffle(plainPassword);
-          break;    
+          break;  
+        case 'Playfair':
+            if (!encryptionKey) {
+                result = 'Key required for Playfair Cipher';
+                break;
+            }
+            try{
+              result = encryptPlayfair(plainPassword, encryptionKey);
+              break;
+            } catch (err) {
+              result = 'Invalid playfair key';
+              console.log(err)
+              break;  
+            }
 
       default:
         result = 'Invalid encryption method';
