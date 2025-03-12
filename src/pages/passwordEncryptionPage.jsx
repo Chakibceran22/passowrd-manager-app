@@ -194,18 +194,7 @@ const PasswordEncryptor = () => {
           
           {encryptionType === 'Hill' ? (
             <HillMatrixInput isDarkMode={isDarkMode} hillMatrix={hillMatrix} handleHillMatrixChange={handleHillMatrixChange} />
-          ) : (
-            encryptionType !== 'RSA' &&
-            encryptionType !== "Affine" &&
-            encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
-              <KeyInput
-                isDarkMode={isDarkMode}
-                setKey={setEncryptionKey}
-                Key={encryptionKey}
-                notice={"Encryption Key"}
-              />
-            )
-          )}
+          ) : null}
 
           {encryptionType !== 'RSA' && encryptionType !== "Affine" && encryptionType !== "Hill" && encryptionMethods.find(m => m.value === encryptionType)?.requiresKey && (
             <KeyInput isDarkMode={isDarkMode} setKey={setEncryptionKey} Key={encryptionKey} notice={"Encryption Key"} />
